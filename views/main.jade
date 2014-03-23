@@ -1,0 +1,64 @@
+doctype html
+html
+    head
+        title(ng-bind="$root.pageTitle")
+
+        meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+        meta(name="fragment", content="!")
+        meta(name="{{meta.name}}", content="{{meta.content}}", ng-repeat="meta in $root.metas")
+
+        // STYLES
+        link(rel="stylesheet", href="/assets/0.0.0/styles/bootstrap.css")
+        link(rel="stylesheet", href="/assets/0.0.0/styles/bootstrap-theme.css")
+        link(rel="stylesheet", href="/assets/0.0.0/styles/font-awesome.css")
+        link(rel="stylesheet", href="/assets/0.0.0/styles/angular-motion.css")
+        // STYLES END
+
+    body
+
+        .slide-animate(ng-include="'#{AssetsService.templateAssets('components/navbar.html')}'")
+
+        .ng-view
+
+        script(type="text/javascript").
+            (function () {
+                var jsAssetsPath = '#{AssetsService.CLIENT_JS_ASSETS_PATH}';
+                var styleAssetsPath = '#{AssetsService.CLIENT_STYLE_ASSETS_PATH}';
+                var templateAssetsPath = '#{AssetsService.CLIENT_TEMPLATE_ASSETS_PATH}';
+                window.assets = {
+                    js: {
+                        path: jsAssetsPath,
+                        concat: function (path){
+                            return jsAssetsPath + path;
+                        }
+                    },
+                    style: {
+                        path: styleAssetsPath,
+                        concat: function (path){
+                            return styleAssetsPath + path;
+                        }
+                    },
+                    template: {
+                        path: templateAssetsPath,
+                        concat: function (path){
+                            return templateAssetsPath + path;
+                        }
+                    }
+                };
+                window.csrf = '#{_csrf}';
+            })();
+
+        // SCRIPTS
+        script(type="text/javascript", src="/assets/0.0.0/js/vendor/jquery.js")
+        script(type="text/javascript", src="/assets/0.0.0/js/vendor/bootstrap.js")
+        script(type="text/javascript", src="/assets/0.0.0/js/vendor/angular.js")
+        script(type="text/javascript", src="/assets/0.0.0/js/vendor/angular-route.js")
+        script(type="text/javascript", src="/assets/0.0.0/js/vendor/angular-animate.js")
+        script(type="text/javascript", src="/assets/0.0.0/js/vendor/angular-strap.js")
+        script(type="text/javascript", src="/assets/0.0.0/js/vendor/angular-strap.tpl.js")
+        script(type="text/javascript", src="/assets/0.0.0/js/vendor/socket.io.js")
+        script(type="text/javascript", src="/assets/0.0.0/js/vendor/sails.io.js")
+        script(type="text/javascript", src="/assets/0.0.0/js/vendor/async.js")
+        script(type="text/javascript", src="/assets/0.0.0/js/vendor/require.js")
+        script(type="text/javascript", src="/assets/0.0.0/js/setup.js")
+        // SCRIPTS END

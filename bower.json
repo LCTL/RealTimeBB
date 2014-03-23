@@ -1,0 +1,29 @@
+{
+  "name": "RealTimeBB",
+  "version": "0.0.0",
+  "main": "app.js",
+  "private": false,
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "test/**",
+    "tests/**"
+  ],
+  "dependencies": {
+    "requirejs": "2.1.11",
+    "jquery": "2.1.0",
+    "bootstrap": "3.1.1",
+    "fontawesome": "v4.0.3",
+    "angular": "v1.3.0-beta.3",
+    "angular-route": "v1.3.0-beta.3",
+    "angular-animate": "v1.3.0-beta.3",
+    "angular-strap": "v2.0.0-rc.4",
+    "angular-motion": "0.3.2",
+    "angularAMD": "v0.1.0",
+    "async": "0.2.10"
+  },
+  "resolutions": {
+    "angular": "1.3.0-beta.3",
+    "angular-animate": "v1.3.0-beta.3"
+  }
+}

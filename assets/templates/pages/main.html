@@ -1,0 +1,14 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-6" ng-repeat="forum in forums">
+            <div class="panel panel-default" >
+                <div class="panel-heading">
+                    <span ng-bind="forum.name"></span>
+                </div>
+                <div class="panel-body">
+                    <span ng-bind="forum.desc"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
