@@ -2,6 +2,28 @@ define ['app', 'CommunicationService'], (app) ->
 
     app.register.service 'UserService', ['$q', '$log', '$rootScope', 'CommunicationService', ($q, $log, $rootScope, communicationService) ->
 
+        current = ->
+
+            deferred = $q.defer()
+
+            if $rootScope.user
+
+                deferred.resolve $rootScope.user
+
+            else
+
+                communicationService.get('/user/current').then (user) ->
+
+                    $log.debug user
+
+                    deferred.resolve user
+
+            return deferred.promise
+
+        current().then (user) ->
+
+            $rootScope.user = user
+
         checkAvailable = (data, action) ->
 
             deferred = $q.defer()
@@ -50,23 +72,7 @@ define ['app', 'CommunicationService'], (app) ->
 
             return deferred.promise
 
-        current: () ->
-
-            deferred = $q.defer()
-
-            if $rootScope.user
-
-                deferred.resolve $rootScope.user
-
-            else
-
-                communicationService.get('/user/current').then (user) ->
-
-                    $log.debug user
-
-                    deferred.resolve user
-
-            return deferred.promise
+        current: current
 
         isEmailAvailable: (email) -> checkAvailable email, 'isEmailAvailable'
 

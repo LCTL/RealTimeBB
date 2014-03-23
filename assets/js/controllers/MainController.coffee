@@ -1,16 +1,8 @@
-define ['app', 'CommunicationService'], (app) ->
+define ['app', 'UserService'], (app) ->
 
-    app.register.controller 'MainController', ['$rootScope', '$scope', 'CommunicationService', ($rootScope, $scope, communicationService) ->
+    app.register.controller 'MainController', ['$rootScope', '$scope', 'UserService', ($rootScope, $scope, userService) ->
 
         $rootScope.pageTitle = "RealTimeBB"
-
-        communicationService.get('/forum').then (forums) ->
-
-            $scope.forums = forums
-
-        communicationService.addListener 'message', null, (message) ->
-
-            console.dir message
 
     ]
 
