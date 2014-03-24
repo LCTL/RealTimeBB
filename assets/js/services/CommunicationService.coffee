@@ -1,126 +1,123 @@
 define ['app'], (app) ->
 
-    app.register.service 'CommunicationService', ['$log', '$q', ($log, $q) ->
+    app.register.service 'CommunicationService', ['$log', '$q', 
 
-        connected = false
-        listeners = {}
-        csrf = window.csrf
-        socket = null
+        class CommunicationService
 
-        action = (path, data, method, needCsrf) ->
+            constructor: (@$log, @$q) ->
 
-            deferred = $q.defer()
+                @connectSocket()
 
-            if typeof needCsrf == 'undefined'
+            connectSocket: ->
 
-                needCsrf = true
+                if not @connected
 
-            if needCsrf
+                    @socket = window.io.connect()
 
-                data = {} if not data
+                    @socket.on 'connect', =>
 
-                angular.extend data, _csrf: csrf
+                        @$log.debug 'socket connected'
 
-            socket[method] path, data, (response) ->
+                        @connected = true
 
-                $log.debug 'action %s', method
+                    @socket.on 'disconnect', =>
 
-                $log.debug response
+                        @$log.debug 'socket disconnected'
 
-                if response and response.status and (response.status >= 300 or response.status < 200)
+                        @connected = false
 
-                    $log.debug 'reject'
+            action: (path, data, method, needCsrf) ->
 
-                    deferred.reject response
+                deferred = @$q.defer()
 
-                else
+                if typeof needCsrf == 'undefined'
 
-                    $log.debug 'resolve'
+                    needCsrf = true
 
-                    deferred.resolve response
+                if needCsrf
 
-            return deferred.promise
+                    data = {} if not data
 
-        connectSocket = ->
+                    angular.extend data, _csrf: csrf
 
-            socket = window.io.connect()
+                @socket[method] path, data, (response) =>
 
-            socket.on 'connect', ->
+                    @$log.debug 'action %s', method
 
-                $log.debug 'Socket connected'
+                    @$log.debug response
 
-                connected = true
+                    if response and response.status and (response.status >= 300 or response.status < 200)
 
-            socket.on 'disconnect', ->
+                        @$log.debug 'reject'
 
-                $log.debug 'Socket disconnected'
+                        deferred.reject response
 
-                connected = false
+                    else
 
-        connectSocket()
+                        @$log.debug 'resolve'
 
-        connected: connected
+                        deferred.resolve response
 
-        connect: connectSocket
+                return deferred.promise
 
-        get: (path, data) ->
+            get: (path, data) ->
 
-            action(path, data, 'get', false)
+                @action(path, data, 'get', false)
 
-        post: (path, data) ->
+            post: (path, data) ->
 
-            action(path, data, 'post')
+                @action(path, data, 'post')
 
-        put: (path, data) ->
+            put: (path, data) ->
 
-            action(path, data, 'put')
+                @action(path, data, 'put')
 
-        delete: (path, data) ->
+            delete: (path, data) ->
 
-            action(path, data, 'delete')
+                @action(path, data, 'delete')
 
-        addListener: (event, filter, listener) ->
+            addListener: (event, filter, listener) ->
 
-            wrapper = 
+                wrapper = 
 
-                filter: filter
+                    filter: filter
 
-                listener: listener
+                    listener: listener
 
-            if not listeners[event]
+                if not @listeners[event]
 
-                listeners[event] = []
+                    @listeners[event] = []
 
-                socket.on event, (message) ->
+                    @socket.on event, (message) =>
 
-                    eventIterator = (wrapper, callback) ->
+                        eventIterator = (wrapper, callback) ->
 
-                        #TODO compare message data is equal filter specific value
+                            #TODO compare message data is equal filter specific value
 
-                        wrapper.listener message
+                            wrapper.listener message
 
-                        callback false
+                            callback false
 
-                    async.each listeners[event], eventIterator, (error) ->
+                        async.each @listeners[event], eventIterator, (error) =>
 
-                        $log.error error if error
+                            @$log.error error if error
 
-            listeners[event].push wrapper
+                @listeners[event].push wrapper
 
-        removeListener: (event, listener) ->
+            removeListener: (event, listener) ->
 
-            if listeners[event]
+                if @listeners[event]
 
-                iterator = (wrapper, callback) ->
+                    iterator = (wrapper, callback) =>
 
-                    if wrapper.listener == listener then callback(false) else callback(true)
+                        if wrapper.listener == listener then callback(false) else callback(true)
 
-                async.filter listeners[event], iterator, (results) ->
+                    async.filter @listeners[event], iterator, (results) =>
 
-                    listeners[event] = results
+                        @listeners[event] = results
 
-        emit: (event, message) ->
+            emit: (event, message) ->
 
-            socket.emit event, message
+                @socket.emit event, message
 
     ]

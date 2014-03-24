@@ -1,81 +1,93 @@
 define ['app', 'CommunicationService'], (app) ->
 
-    app.register.service 'UserService', ['$q', '$log', '$rootScope', 'CommunicationService', ($q, $log, $rootScope, communicationService) ->
+    app.register.service 'UserService', ['$log', '$q', '$rootScope', 'CommunicationService', 
 
-        current = ->
+        class UserService
 
-            deferred = $q.defer()
+            constructor: (@$log, @$q, @$rootScope, @communicationService) ->
 
-            if $rootScope.user
+                @getCurrentUser().then (user) =>
 
-                deferred.resolve $rootScope.user
+                    @setCurrentUser user
 
-            else
+            setCurrentUser: (user) ->
 
-                communicationService.get('/user/current').then (user) ->
+                @$rootScope.user = user
 
-                    $log.debug user
+            getCurrentUser: ->
 
-                    deferred.resolve user
+                deferred = @$q.defer()
 
-            return deferred.promise
+                if @$rootScope.user
 
-        current().then (user) ->
-
-            $rootScope.user = user
-
-        checkAvailable = (data, action) ->
-
-            deferred = $q.defer()
-
-            communicationService.get("/user/#{action}/#{data}").then (response) ->
-            
-                $log.debug response
-
-                deferred.resolve response
-
-            return deferred.promise
-
-        register: (user) ->
-
-            deferred = $q.defer()
-
-            communicationService.post('/user/register', user).then (data) ->
-
-                $log.debug data
-
-                if data.username
-
-                    $rootScope.user = data
-                    deferred.resolve data
+                    deferred.resolve @$rootScope.user
 
                 else
 
-                    deferred.reject data
+                    @communicationService.get('/user/current').then (user) =>
 
-            return deferred.promise
+                        @$log.debug user
 
-        login: (user) ->
+                        @$rootScope.user = user
 
-            deferred = $q.defer()
+                        deferred.resolve user
 
-            communicationService.post('/user/login', user).then (user) ->
+                return deferred.promise
 
-                if user
+            checkUserDataAvailable: (data, action) ->
 
-                    $rootScope.user = user
-                    deferred.resolve user
+                deferred = @$q.defer()
 
-                else
+                @communicationService.get("/user/#{action}/#{data}").then (response) =>
+                
+                    @$log.debug response
 
-                    deferred.reject user
+                    deferred.resolve response
 
-            return deferred.promise
+                return deferred.promise
 
-        current: current
+            register: (user) ->
 
-        isEmailAvailable: (email) -> checkAvailable email, 'isEmailAvailable'
+                deferred = @$q.defer()
 
-        isUserNameAvailable: (username) -> checkAvailable username, 'isUsernameAvailable'
+                @communicationService.post('/user/register', user).then (data) =>
+
+                    @$log.debug data
+
+                    if data.username
+
+                        @$rootScope.user = data
+                        deferred.resolve data
+
+                    else
+
+                        deferred.reject data
+
+                return deferred.promise
+
+            login: (user) ->
+
+                deferred = @$q.defer()
+
+                @communicationService.post('/user/login', user).then (user) =>
+
+                    if user
+
+                        @$rootScope.user = user
+                        deferred.resolve user
+
+                    else
+
+                        deferred.reject user
+
+                return deferred.promise
+
+            isEmailAvailable: (email) -> 
+
+                @checkUserDataAvailable email, 'isEmailAvailable'
+
+            isUserNameAvailable: (username) -> 
+
+                @checkUserDataAvailable username, 'isUsernameAvailable'
 
     ]
