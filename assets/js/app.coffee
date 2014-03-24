@@ -1,8 +1,8 @@
-define ['angularAMD'], (angularAMD) ->
+define ['angularAMD', 'classes/CommunicationService', 'classes/UserService'], (angularAMD, CommunicationService, UserService) ->
 
     app = angular.module 'webapp', ['ngRoute', 'route-segment', 'view-segment', 'ngAnimate', 'mgcrea.ngStrap']
 
-    app.config ['$routeProvider',  '$routeSegmentProvider', '$locationProvider', ($routeProvider, $routeSegmentProvider, $locationProvider) ->
+    app.config ['$routeProvider',  '$routeSegmentProvider', '$locationProvider', '$injector', ($routeProvider, $routeSegmentProvider, $locationProvider, $injector) ->
 
         $locationProvider.html5Mode(true).hashPrefix('!')
 
@@ -45,32 +45,23 @@ define ['angularAMD'], (angularAMD) ->
 
     ]
 
-    app.run ['$rootScope', ($rootScope) ->
+    app.service 'CommunicationService', CommunicationService
+    app.service 'UserService', UserService
+
+    app.run ['$rootScope', 'UserService', ($rootScope, userService) ->
 
         $rootScope.navbarTemplateUrl = window.assets.template.concat('components/navbar.html')
         
-    ]    
+        $rootScope.logout = () ->
 
-    requirejs ['UserService'], () ->
+            userService.logout()
 
-        #injector = angular.injector ['webapp']
+        userService.getCurrentUser().then (user) ->
 
-        ### Cannot inject UserService
-        injector.invoke ['$rootScope', 'UserService', ($rootScope, userService) ->
+            userService.setCurrentUser user
 
-            $rootScope.logout = () ->
-
-                userService.logout()
-
-            userService.getCurrentUser().then (user) ->
-
-                userService.setCurrentUser user
-
-        ]
-        ###
+    ]  
 
     angularAMD.bootstrap(app)
-
-    angularAMD.processQueue()
 
     return app
