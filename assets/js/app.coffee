@@ -1,11 +1,13 @@
 define ['angularAMD'], (angularAMD) ->
 
-    app = angular.module 'webapp', ['ngRoute', 'ngAnimate', 'mgcrea.ngStrap']
+    app = angular.module 'webapp', ['ngRoute', 'route-segment', 'view-segment', 'ngAnimate', 'mgcrea.ngStrap']
 
-    app.config ['$routeProvider', '$locationProvider', ($routeProvider, $locationProvider) ->
+    app.config ['$routeSegmentProvider', '$locationProvider', ($routeSegmentProvider, $locationProvider, $q) ->
 
         $locationProvider.html5Mode(true).hashPrefix('!')
 
+        $routeSegmentProvider.options.autoLoadTemplates = true
+        
         main = angularAMD.route
             templateUrl: window.assets.template.concat('pages/main.html')
             controller: 'MainController'
@@ -18,11 +20,13 @@ define ['angularAMD'], (angularAMD) ->
             templateUrl: window.assets.template.concat('pages/login.html')
             controller: 'LoginController'
 
-        $routeProvider
-        .when('/', main)
-        .when('/register', register)
-        .when('/login', login)
-        .otherwise(redirectTo: '/')
+        $routeSegmentProvider
+            .when('/',             'main')
+            .when('/register',     'register')
+            .when('/login',        'login')
+            .segment('main',        main)
+            .segment('register',    register)
+            .segment('login',       login)
 
     ]
 

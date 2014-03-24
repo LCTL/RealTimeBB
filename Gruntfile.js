@@ -70,6 +70,7 @@ module.exports = function (grunt) {
     jsVendorBaseAssetsPath + 'angular.js',
     jsVendorBaseAssetsPath + 'angular.js',
     jsVendorBaseAssetsPath + 'angular-route.js',
+    jsVendorBaseAssetsPath + 'angular-route-segment.js',
     jsVendorBaseAssetsPath + 'angular-animate.js',
     jsVendorBaseAssetsPath + 'angular-strap.js', 
     jsVendorBaseAssetsPath + 'angular-strap.tpl.js',
@@ -252,6 +253,11 @@ module.exports = function (grunt) {
           expand: true,
           cwd: bowerBasePath + 'angular-route',
           src: ['angular-route.js'],
+          dest: jsVendorBaseAssetsPath
+        }, { //bower angular-route-segment
+          expand: true,
+          cwd: bowerBasePath + 'angular-route-segment/build/',
+          src: ['angular-route-segment.js'],
           dest: jsVendorBaseAssetsPath
         }, { //bower angular-animate
           expand: true,

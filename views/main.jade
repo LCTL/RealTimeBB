@@ -18,7 +18,7 @@ html
 
         .slide-animate(ng-include="'#{AssetsService.templateAssets('components/navbar.html')}'")
 
-        .ng-view
+        div(app-view-segment='0')
 
         script(type="text/javascript").
             (function () {
@@ -53,6 +53,7 @@ html
         script(type="text/javascript", src="/assets/0.0.0/js/vendor/bootstrap.js")
         script(type="text/javascript", src="/assets/0.0.0/js/vendor/angular.js")
         script(type="text/javascript", src="/assets/0.0.0/js/vendor/angular-route.js")
+        script(type="text/javascript", src="/assets/0.0.0/js/vendor/angular-route-segment.js")
         script(type="text/javascript", src="/assets/0.0.0/js/vendor/angular-animate.js")
         script(type="text/javascript", src="/assets/0.0.0/js/vendor/angular-strap.js")
         script(type="text/javascript", src="/assets/0.0.0/js/vendor/angular-strap.tpl.js")
