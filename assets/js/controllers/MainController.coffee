@@ -1,6 +1,6 @@
 define ['app', 'UserService'], (app) ->
 
-    app.controller 'MainController', ['$rootScope', '$scope', 'UserService', ($rootScope, $scope, userService) ->
+    app.register.controller 'MainController', ['$rootScope', '$scope', 'UserService', ($rootScope, $scope, userService) ->
 
         $rootScope.pageTitle = "RealTimeBB"
 

@@ -53,7 +53,7 @@ define ['angularAMD'], (angularAMD) ->
 
     requirejs ['UserService'], () ->
 
-        injector = angular.injector ['webapp']
+        #injector = angular.injector ['webapp']
 
         ### Cannot inject UserService
         injector.invoke ['$rootScope', 'UserService', ($rootScope, userService) ->
