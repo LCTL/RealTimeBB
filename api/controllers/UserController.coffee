@@ -70,6 +70,12 @@ module.exports =
             
             res.json user
 
+    logout: (req, res) ->
+
+        delete req.session.user
+
+        res.json true
+
     current: (req, res) ->
 
         res.json req.session.user 

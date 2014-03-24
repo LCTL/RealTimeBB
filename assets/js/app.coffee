@@ -49,7 +49,25 @@ define ['angularAMD'], (angularAMD) ->
 
         $rootScope.navbarTemplateUrl = window.assets.template.concat('components/navbar.html')
         
-    ]
+    ]    
+
+    requirejs ['UserService'], () ->
+
+        injector = angular.injector ['webapp']
+
+        ### Cannot inject UserService
+        injector.invoke ['$rootScope', 'UserService', ($rootScope, userService) ->
+
+            $rootScope.logout = () ->
+
+                userService.logout()
+
+            userService.getCurrentUser().then (user) ->
+
+                userService.setCurrentUser user
+
+        ]
+        ###
 
     angularAMD.bootstrap(app)
 

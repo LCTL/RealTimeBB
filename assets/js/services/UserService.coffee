@@ -6,10 +6,6 @@ define ['app', 'CommunicationService'], (app) ->
 
             constructor: (@$log, @$q, @$rootScope, @communicationService) ->
 
-                @getCurrentUser().then (user) =>
-
-                    @setCurrentUser user
-
             setCurrentUser: (user) ->
 
                 @$rootScope.user = user
@@ -79,6 +75,24 @@ define ['app', 'CommunicationService'], (app) ->
                     else
 
                         deferred.reject user
+
+                return deferred.promise
+
+            logout: () ->
+
+                deferred = @$q.defer()
+
+                @communicationService.get('/user/logout').then (result) =>
+
+                    if result 
+                        
+                        @$rootScope.user = null
+
+                        deferred.resolve true 
+
+                    else 
+
+                        deferred.reject false
 
                 return deferred.promise
 
