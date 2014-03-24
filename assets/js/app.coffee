@@ -2,7 +2,7 @@ define ['angularAMD'], (angularAMD) ->
 
     app = angular.module 'webapp', ['ngRoute', 'route-segment', 'view-segment', 'ngAnimate', 'mgcrea.ngStrap']
 
-    app.config ['$routeSegmentProvider', '$locationProvider', ($routeSegmentProvider, $locationProvider, $q) ->
+    app.config ['$routeProvider',  '$routeSegmentProvider', '$locationProvider', ($routeProvider, $routeSegmentProvider, $locationProvider) ->
 
         $locationProvider.html5Mode(true).hashPrefix('!')
 
@@ -20,14 +20,35 @@ define ['angularAMD'], (angularAMD) ->
             templateUrl: window.assets.template.concat('pages/login.html')
             controller: 'LoginController'
 
-        $routeSegmentProvider
-            .when('/',             'main')
-            .when('/register',     'register')
-            .when('/login',        'login')
-            .segment('main',        main)
-            .segment('register',    register)
-            .segment('login',       login)
+        admin = angularAMD.route
+            templateUrl: window.assets.template.concat('pages/admin/frame.html')
+            controller: 'AdminFrameController'
 
+        forumManagement = angularAMD.route
+            templateUrl: window.assets.template.concat('pages/admin/segments/forum-management.html')
+            controller: 'ForumManagementController'
+
+        $routeSegmentProvider
+            .when('/',                              'main')
+            .when('/register',                      'register')
+            .when('/login',                         'login')
+            .when('/admin',                         'admin')
+            .when('/admin/forum-management',        'admin.forum')
+            .segment('main',                        main)
+            .segment('register',                    register)
+            .segment('login',                       login)
+            .segment('admin',                       admin)
+
+        $routeSegmentProvider.within('admin').segment('forum', forumManagement)
+
+        $routeProvider.otherwise redirectTo: '/'
+
+    ]
+
+    app.run ['$rootScope', ($rootScope) ->
+
+        $rootScope.navbarTemplateUrl = window.assets.template.concat('components/navbar.html')
+        
     ]
 
     angularAMD.bootstrap(app)

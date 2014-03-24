@@ -47,7 +47,8 @@ module.exports = function (grunt) {
     styleBaseAssetsPath + 'bootstrap.css',
     styleBaseAssetsPath + 'bootstrap-theme.css',
     styleBaseAssetsPath + 'font-awesome.css',
-    styleBaseAssetsPath + 'angular-motion.css'
+    styleBaseAssetsPath + 'angular-motion.css',
+    styleBaseAssetsPath + 'sidebar.css'
   ];
 
 

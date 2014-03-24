@@ -17,10 +17,18 @@
                 <li data-match-route="/login" ng-hide="$root.user">
                     <a href="/login">Login</a>
                 </li>
-                <li data-match-route="/profile" ng-show="$root.user">
-                    <a href="/profile">
-                        <span ng-bind="$root.user.username"></span>
+                <li class="dropdown" ng-show="$root.user">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span ng-bind="$root.user.username"></span><b class="caret"></b>
                     </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#">Profile</a>
+                        </li>
+                        <li ng-show="$root.user.isAdmin">
+                            <a href="/admin">Admin Console</a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>

@@ -15,6 +15,8 @@ require.config
         'MainController':       'controllers/MainController'
         'RegisterController':   'controllers/RegisterController'
         'LoginController':      'controllers/LoginController'
+        'AdminFrameController': 'controllers/AdminFrameController'
+        'ForumManagementController': 'controllers/ForumManagementController'
 
     shim:
 
