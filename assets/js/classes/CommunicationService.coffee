@@ -2,9 +2,9 @@ define [], () ->
 
     class CommunicationService
 
-        @$inject: ['$log', '$q']
+        @$inject: ['$log', '$q', 'socket.io', 'csrf']
 
-        constructor: (@$log, @$q) ->
+        constructor: (@$log, @$q, @io, @csrf) ->
 
             @connectSocket()
 
@@ -12,7 +12,7 @@ define [], () ->
 
             if not @connected
 
-                @socket = window.io.connect()
+                @socket = @io.connect()
 
                 @socket.on 'connect', =>
 
@@ -38,7 +38,7 @@ define [], () ->
 
                 data = {} if not data
 
-                angular.extend data, _csrf: csrf
+                angular.extend data, _csrf: @csrf
 
             @socket[method] path, data, (response) =>
 

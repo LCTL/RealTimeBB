@@ -45,6 +45,9 @@ define ['angularAMD', 'classes/CommunicationService', 'classes/UserService'], (a
 
     ]
 
+    app.value 'socket.io', window.io
+    app.value 'csrf', window.csrf
+
     app.service 'CommunicationService', CommunicationService
     app.service 'UserService', UserService
 
