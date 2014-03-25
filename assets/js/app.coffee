@@ -47,6 +47,17 @@ define ['angularAMD', 'classes/CommunicationService', 'classes/UserService'], (a
 
     app.service 'CommunicationService', CommunicationService
     app.service 'UserService', UserService
+    app.factory 'promiseTask', ['$q', ($q) ->
+
+        (task) ->
+
+            deferred = $q.defer()
+
+            task deferred
+
+            deferred.promise
+
+    ]
 
     app.run ['$rootScope', 'UserService', ($rootScope, userService) ->
 

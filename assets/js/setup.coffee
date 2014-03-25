@@ -11,6 +11,7 @@ require.config
 
         'CommunicationService': 'services/CommunicationService'
         'UserService':          'services/UserService'
+        'ResourceFactory':      'services/ResourceFactory'
 
         'MainController':       'controllers/MainController'
         'RegisterController':   'controllers/RegisterController'

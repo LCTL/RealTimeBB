@@ -30,7 +30,7 @@ define [], () ->
 
             deferred = @$q.defer()
 
-            if typeof needCsrf == 'undefined'
+            if typeof needCsrf == 'undefined' and method != 'get'
 
                 needCsrf = true
 
