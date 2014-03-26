@@ -28,7 +28,7 @@ define ['app'], (app) ->
 
                                 , (item, callback) ->
 
-                                    callback null, Resource.newInstance item
+                                    callback null, Resource.create item
 
                                 , (err, results) ->
 
@@ -36,13 +36,13 @@ define ['app'], (app) ->
 
                             else if results
 
-                                deferred.resolve Resource.newInstance results
+                                deferred.resolve Resource.create results
 
                         , (error) ->
 
                             deferred.reject error
 
-                @newInstance: (data) ->
+                @create: (data) ->
 
                     new Resource data
 
