@@ -69,7 +69,7 @@ define ['app'], (app) ->
 
                         skip = (page - 1) * limit
 
-                    Resource.findAll(page, limit)
+                    Resource.findAll(skip, limit)
 
                 @findById: (id) ->
 
