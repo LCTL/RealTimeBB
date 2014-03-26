@@ -19,6 +19,9 @@ require.config
         'AdminFrameController': 'controllers/AdminFrameController'
         'ForumManagementController': 'controllers/ForumManagementController'
 
+        'User':                 'models/User'
+        'Forum':                'models/Forum'
+
     shim:
 
         'ngload':               

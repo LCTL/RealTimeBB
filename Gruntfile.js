@@ -75,6 +75,7 @@ module.exports = function (grunt) {
     jsVendorBaseAssetsPath + 'angular-animate.js',
     jsVendorBaseAssetsPath + 'angular-strap.js', 
     jsVendorBaseAssetsPath + 'angular-strap.tpl.js',
+    jsVendorBaseAssetsPath + 'ng-infinite-scroll.js',
 
     // Bring in the socket.io client
     jsVendorBaseAssetsPath + 'socket.io.js',
@@ -294,6 +295,11 @@ module.exports = function (grunt) {
           expand: true,
           cwd: bowerBasePath + 'async/lib',
           src: ['async.js'],
+          dest: jsVendorBaseAssetsPath
+        }, { //bower ng-infinite-scroll
+          expand: true,
+          cwd: bowerBasePath + 'ngInfiniteScroll/',
+          src: ['ng-infinite-scroll.js'],
           dest: jsVendorBaseAssetsPath
         }]
       },
