@@ -2,9 +2,9 @@ define [], () ->
 
     class CommunicationService
 
-        @$inject: ['$log', '$q', 'socket.io', 'csrf']
+        @$inject: ['$log', 'socket.io', 'csrf', 'promiseTask']
 
-        constructor: (@$log, @$q, @io, @csrf) ->
+        constructor: (@$log, @io, @csrf, @promiseTask) ->
 
             @connectSocket()
 
@@ -28,37 +28,35 @@ define [], () ->
 
         action: (path, data, method, needCsrf) ->
 
-            deferred = @$q.defer()
+            @promiseTask (deferred) =>
 
-            if typeof needCsrf == 'undefined' and method != 'get'
+                if typeof needCsrf == 'undefined' and method != 'get'
 
-                needCsrf = true
+                    needCsrf = true
 
-            if needCsrf
+                if needCsrf
 
-                data = {} if not data
+                    data = {} if not data
 
-                angular.extend data, _csrf: @csrf
+                    angular.extend data, _csrf: @csrf
 
-            @socket[method] path, data, (response) =>
+                @socket[method] path, data, (response) =>
 
-                @$log.debug 'action %s', method
+                    @$log.debug 'action %s', method
 
-                @$log.debug response
+                    @$log.debug response
 
-                if response and response.status and (response.status >= 300 or response.status < 200)
+                    if response and response.status and (response.status >= 300 or response.status < 200)
 
-                    @$log.debug 'reject'
+                        @$log.debug 'reject'
 
-                    deferred.reject response
+                        deferred.reject response
 
-                else
+                    else
 
-                    @$log.debug 'resolve'
+                        @$log.debug 'resolve'
 
-                    deferred.resolve response
-
-            return deferred.promise
+                        deferred.resolve response
 
         get: (path, data) ->
 

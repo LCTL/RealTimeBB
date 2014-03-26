@@ -2,9 +2,9 @@ define [], () ->
 
     class UserService
 
-        @$inject: ['$log', '$q', '$rootScope', 'CommunicationService']
+        @$inject: ['$log', '$rootScope', 'CommunicationService', 'promiseTask']
 
-        constructor: (@$log, @$q, @$rootScope, @communicationService) ->
+        constructor: (@$log, @$rootScope, @communicationService, @promiseTask) ->
 
         setCurrentUser: (user) ->
 
@@ -12,90 +12,80 @@ define [], () ->
 
         getCurrentUser: ->
 
-            deferred = @$q.defer()
+            @promiseTask (deferred) =>
 
-            if @$rootScope.user
+                if @$rootScope.user
 
-                deferred.resolve @$rootScope.user
+                    deferred.resolve @$rootScope.user
 
-            else
+                else
 
-                @communicationService.get('/user/current').then (user) =>
+                    @communicationService.get('/user/current').then (user) =>
 
-                    @$log.debug user
+                        @$log.debug user
 
-                    @$rootScope.user = user
+                        @$rootScope.user = user
 
-                    deferred.resolve user
-
-            return deferred.promise
+                        deferred.resolve user
 
         checkUserDataAvailable: (data, action) ->
 
-            deferred = @$q.defer()
+            @promiseTask (deferred) =>
 
-            @communicationService.get("/user/#{action}/#{data}").then (response) =>
-            
-                @$log.debug response
+                @communicationService.get("/user/#{action}/#{data}").then (response) =>
+                
+                    @$log.debug response
 
-                deferred.resolve response
-
-            return deferred.promise
+                    deferred.resolve response
 
         register: (user) ->
 
-            deferred = @$q.defer()
+            @promiseTask (deferred) =>
 
-            @communicationService.post('/user/register', user).then (data) =>
+                @communicationService.post('/user/register', user).then (data) =>
 
-                @$log.debug data
+                    @$log.debug data
 
-                if data.username
+                    if data.username
 
-                    @$rootScope.user = data
-                    deferred.resolve data
+                        @$rootScope.user = data
+                        deferred.resolve data
 
-                else
+                    else
 
-                    deferred.reject data
-
-            return deferred.promise
+                        deferred.reject data
 
         login: (user) ->
 
-            deferred = @$q.defer()
+            @promiseTask (deferred) =>
 
-            @communicationService.post('/user/login', user).then (user) =>
+                @communicationService.post('/user/login', user).then (user) =>
 
-                if user
+                    if user
 
-                    @$rootScope.user = user
-                    deferred.resolve user
+                        @$rootScope.user = user
+                        deferred.resolve user
 
-                else
+                    else
 
-                    deferred.reject user
-
-            return deferred.promise
+                        deferred.reject user
 
         logout: () ->
 
-            deferred = @$q.defer()
+            @promiseTask (deferred) =>
 
-            @communicationService.get('/user/logout').then (result) =>
+                @communicationService.get('/user/logout').then (result) =>
 
-                @$log.debug "logout %s", result
+                    @$log.debug "logout %s", result
 
-                if result 
-                    
-                    @$rootScope.user = null
-                    deferred.resolve true 
+                    if result 
+                        
+                        @$rootScope.user = null
+                        deferred.resolve true 
 
-                else 
+                    else 
 
-                    deferred.reject false
-
-            return deferred.promise
+                        deferred.reject false
 
         isEmailAvailable: (email) -> 
 
