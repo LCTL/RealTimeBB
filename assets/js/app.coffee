@@ -28,18 +28,25 @@ define ['angularAMD', 'classes/CommunicationService', 'classes/UserService'], (a
             templateUrl: window.assets.template.concat('pages/admin/segments/forum-management.html')
             controller: 'ForumManagementController'
 
+        userManagement = angularAMD.route
+            templateUrl: window.assets.template.concat('pages/admin/segments/user-management.html')
+            controller: 'UserManagementController'
+
         $routeSegmentProvider
             .when('/',                              'main')
             .when('/register',                      'register')
             .when('/login',                         'login')
             .when('/admin',                         'admin')
             .when('/admin/forum-management',        'admin.forum')
+            .when('/admin/user-management',         'admin.user')
             .segment('main',                        main)
             .segment('register',                    register)
             .segment('login',                       login)
             .segment('admin',                       admin)
 
-        $routeSegmentProvider.within('admin').segment('forum', forumManagement)
+        $routeSegmentProvider.within('admin')
+            .segment('forum', forumManagement)
+            .segment('user', userManagement)
 
         $routeProvider.otherwise redirectTo: '/'
 

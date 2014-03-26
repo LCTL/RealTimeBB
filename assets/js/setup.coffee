@@ -18,6 +18,7 @@ require.config
         'LoginController':      'controllers/LoginController'
         'AdminFrameController': 'controllers/AdminFrameController'
         'ForumManagementController': 'controllers/ForumManagementController'
+        'UserManagementController':  'controllers/UserManagementController'
 
         'User':                 'models/User'
         'Forum':                'models/Forum'

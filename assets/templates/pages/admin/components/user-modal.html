@@ -1,0 +1,53 @@
+<div class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="$hide()">&times;</button>
+                <h4 class="modal-title">User</h4>
+            </div>
+            <div class="modal-body">
+                {{user | json}}
+                <form name="form" role="form" novalidate>
+                    <div class="form-group" ng-class="{'has-error': (form.email.$dirty &amp;&amp; form.email.$invalid) || !user.isEmailAvailable()}">
+                        <label for="email">Email</label>
+                        <div class="input-group">
+                            <input type="text" ng-model="user.email" name="email" class="form-control" placeholder="Email" maxlength="200" ng-minlength="5" ng-pattern="/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/" required />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-ok text-success" ng-show="user.isEmailAvailable()"></span>
+                                <span class="glyphicon glyphicon-remove text-danger" ng-show="!!user.isEmailAvailable()"></span>
+                            </span>
+                        </div>
+                        <div ng-show="form.email.$dirty">
+                            <p ng-show="form.email.$error.required" class="text-danger">Cannot be null or empty</p>
+                            <p ng-show="form.email.$error.minlength" class="text-danger">Minimum 5 character</p>
+                            <p ng-show="form.email.$error.pattern" class="text-danger">Invalid email address</p>
+                            <p ng-show="!!user.isEmailAvailable()" class="text-danger">Email address not available</p>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error': (form.username.$dirty &amp;&amp; form.username.$invalid) || !usernameAvailable}">
+                        <label for="username">Username</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="username" placeholder="Username" ng-model="user.username" maxlength="50" ng-minlength="5" ng-pattern="/^[A-Za-z0-9_]+$/" required />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-ok text-success" ng-show="usernameAvailable"></span>
+                                <span class="glyphicon glyphicon-remove text-danger" ng-show="!usernameAvailable"></span>
+                            </span>
+                        </div>
+                        <div ng-show="form.username.$dirty">
+                            <p ng-show="form.username.$error.required" class="text-danger">Cannot be null or empty</p>
+                            <p ng-show="form.username.$error.minlength" class="text-danger">Minimum 5 character</p>
+                            <p ng-show="form.username.$error.pattern" class="text-danger">Only accept A-Z a-z 0-9 and _ character</p>
+                            <p ng-show="!usernameAvailable" class="text-danger">Username not available</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$hide()">Close</button>
+                <button type="button" class="btn btn-primary" ng-show="mode == 'create'" ng-click="create(forum)">Create</button>
+                <button type="button" class="btn btn-primary" ng-show="mode == 'edit'" ng-click="update(forum)">Save changes</button>
+                <button type="button" class="btn btn-danger" ng-show="mode == 'delete'" ng-click="update(forum)">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>

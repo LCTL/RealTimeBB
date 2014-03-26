@@ -1,0 +1,47 @@
+<h1 class="page-header">User Management</h1>
+
+<button class="btn btn-primary" ng-click="showUserModal(null, 'create')">
+    <span class="fa fa-plus"></span>
+</button>
+
+<div infinite-scroll="nextPage()" infinite-scroll-disabled="busy">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Email</th>
+                <th>Username</th>
+                <th>Create Data</th>
+                <th>Update Data</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="user in users">
+                <td>
+                    <span ng-bind="$index + 1"> </span>
+                </td>
+                <td>
+                    <span ng-bind="user.email"> </span>
+                </td>
+                <td>
+                    <span ng-bind="user.username"> </span>
+                </td>
+                <td>
+                    <span ng-bind="user.createdAt | date:'yyyy-MM-dd HH:mm:ss Z'"> </span>
+                </td>
+                <td>
+                    <span ng-bind="user.updatedAt | date:'yyyy-MM-dd HH:mm:ss Z'"> </span>
+                </td>
+                <td>
+                    <button class="btn btn-default" ng-click="showUserModal(user, 'edit')">
+                        <span class="fa fa-pencil-square-o"></span>
+                    </button>
+                    <button class="btn btn-danger" ng-click="showUserModal(user, 'delete')">
+                        <span class="fa fa-trash-o"></span>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
