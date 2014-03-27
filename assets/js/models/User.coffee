@@ -2,24 +2,27 @@ define ['app', 'ResourceFactory'], (app) ->
 
     app.register.factory 'User', ['CommunicationService', 'promiseTask', 'ResourceFactory', (communicationService, promiseTask, resourceFactory) ->
 
-        UserResource = resourceFactory('/user')
+        resourceFactory '/user',
 
-        class User extends UserResource
+            instanceProperties: 
 
-            isDataAvailable: (data, action) ->
+                isDataAvailable: (data, action) ->
 
-                promiseTask (deferred) =>
+                    promiseTask (deferred) =>
 
-                    communicationService.get("/user/#{action}/#{data}").then (response) =>
+                        communicationService.get("/user/#{action}/#{data}").then (response) =>
 
-                        deferred.resolve response
+                            deferred.resolve response
 
-            isEmailAvailable: () ->
+                isEmailAvailable: () ->
 
-                @isDataAvailable(@email, 'isEmailAvailable')
+                    @isDataAvailable(@email, 'isEmailAvailable').then (response) =>
 
-            isUsernameAvailable: () ->
+                        @emailAvailable = response
 
-                @isDataAvailable(@username, 'isUsernameAvailable')
+                isUsernameAvailable: () ->
 
+                    @isDataAvailable(@username, 'isUsernameAvailable').then (response) =>
+
+                        @usernameAvailable = response
     ]

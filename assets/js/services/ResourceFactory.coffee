@@ -1,110 +1,128 @@
-define ['app'], (app) ->
+define ['app', 'classes/Module'], (app, Module) ->
 
     app.register.factory 'ResourceFactory', ['CommunicationService', 'promiseTask', (communicationService, promiseTask) ->
 
-        (basePath) ->
+        (basePath, options) ->
 
-            class Resource
+            options = {} if not options
+            options.classProperties = {} if not options.classProperties
+            options.instanceProperties = {} if not options.instanceProperties
 
-                @action: (additionalPath, params, method) ->
+            defaultOptions = 
 
-                    promiseTask (deferred) ->
+                classProperties: 
 
-                        if additionalPath
+                    action: (additionalPath, params, method) ->
+                        promiseTask (deferred) ->
 
-                            path = basePath + additionalPath 
+                            if additionalPath
 
-                        else 
+                                path = basePath + additionalPath 
 
-                            path = basePath
+                            else 
 
-                        communicationService.action(path, params, method)
+                                path = basePath
 
-                        .then (results) ->
+                            communicationService.action(path, params, method)
 
-                            if results and angular.isArray results
+                            .then (results) ->
 
-                                async.map results 
+                                if results and angular.isArray results
 
-                                , (item, callback) ->
+                                    async.map results 
 
-                                    callback null, Resource.create item
+                                    , (item, callback) ->
 
-                                , (err, results) ->
+                                        callback null, Resource.create item
 
-                                    deferred.resolve results
+                                    , (err, results) ->
 
-                            else if results
+                                        deferred.resolve results
 
-                                deferred.resolve Resource.create results
+                                else if results
 
-                        , (error) ->
+                                    deferred.resolve Resource.create results
 
-                            deferred.reject error
+                            , (error) ->
 
-                @create: (data) ->
+                                deferred.reject error
 
-                    new Resource data
+                    create: (data) ->
 
-                @findAll: (skip, limit) ->
+                        new Resource data
 
-                    skip ?= 0
-                    limit ?= 20
+                    findAll: (skip, limit) ->
 
-                    params = 
-                        skip: skip
-                        limit: limit
+                        skip ?= 0
+                        limit ?= 20
 
-                    Resource.action(null, params, 'get')
+                        params = 
+                            skip: skip
+                            limit: limit
 
-                @findAllByPaginate: (page, limit) ->
+                        Resource.action(null, params, 'get')
 
-                    limit ?= 20
+                    findAllByPaginate: (page, limit) ->
 
-                    if not page or page < 1
+                        limit ?= 20
 
-                        skip = 0 
+                        if not page or page < 1
 
-                    else
+                            skip = 0 
 
-                        skip = (page - 1) * limit
+                        else
 
-                    Resource.findAll(skip, limit)
+                            skip = (page - 1) * limit
 
-                @findById: (id) ->
+                        Resource.findAll(skip, limit)
 
-                    Resource.action("/#{id}", null, 'get')
+                    findById: (id) ->
+
+                        Resource.action("/#{id}", null, 'get')
+
+                instanceProperties:
+
+                    save: () ->
+
+                        @constructor.action(null, @fetchInstanceParams(), 'post')
+
+                    update: () ->
+
+                        @constructor.action(null, @fetchInstanceParams(), 'put')
+
+                    delete: () ->
+
+                        @constructor.action("/#{@.id}", @fetchInstanceParams(), 'delete')
+
+                    copyPropertyToInstance: (properties) ->
+
+                        @[key] = value for key, value of properties
+
+                    fetchInstanceParams: () ->
+
+                        params = {}
+
+                        for key, value of @
+
+                            params[key] = value if value and typeof value != 'function' 
+
+                        params
+
+            for key, value of options
+
+                defaultOptions[key] = {} if not defaultOptions[key]
+
+                angular.extend(defaultOptions[key], options[key])
+
+            class Resource extends Module
+
+                @extend defaultOptions.classProperties
+                @include defaultOptions.instanceProperties
 
                 constructor: (data) ->
 
                     if data
 
                         @copyPropertyToInstance data
-
-                save: () ->
-
-                    Resource.action(null, @fetchInstanceParams(), 'post')
-
-                update: () ->
-
-                    Resource.action(null, @fetchInstanceParams(), 'put')
-
-                remove: () ->
-
-                    Resource.action("/#{@.id}", @fetchInstanceParams(), 'delete')
-
-                copyPropertyToInstance: (properties) ->
-
-                    @[key] = value for key, value of properties
-
-                fetchInstanceParams: () ->
-
-                    params = {}
-
-                    for key, value of @
-
-                        params[key] = value if value and typeof value != 'function' 
-
-                    params
 
     ]
