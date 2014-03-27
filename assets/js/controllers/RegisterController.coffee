@@ -1,43 +1,20 @@
-define ['app', 'UserService'], (app) ->
+define ['app', 'UserService', 'User'], (app) ->
 
-    app.register.controller 'RegisterController', ['$rootScope', '$scope', '$location', 'UserService', ($rootScope, $scope, $location, userService) ->
+    app.register.controller 'RegisterController', ['$rootScope', '$scope', '$location', 'UserService', 'User', ($rootScope, $scope, $location, userService, User) ->
 
         checkingUsername = false
         checkUserDataAvailableLocking = false
 
         $rootScope.pageTitle = 'Register'
-
-        $scope.user = 
-            email: ''
-            username: ''
-            password: ''
-            passwordConfirmation: ''
-
-        checkUserDataAvailable = (data, userServiceMethod, scopeVariable) ->
-
-            if not checkUserDataAvailableLocking
-
-                checkUserDataAvailableLocking = true
-
-                if data
-
-                    userService[userServiceMethod](data).then (result) ->
-
-                        $scope[scopeVariable] = result
-                        checkUserDataAvailableLocking = false
-
-                else
-
-                    $scope[scopeVariable] = false 
-                    checkUserDataAvailableLocking = false
+        $scope.user = User.create()
 
         $scope.$watch 'user.username', (newValue, oldValue) ->
-
-            $scope.checkUsernameAvailable newValue
+            
+            $scope.user.isUsernameAvailable()
 
         $scope.$watch 'user.email', (newValue, oldValue) ->
 
-            $scope.checkEmailAvailable newValue
+            $scope.user.isEmailAvailable()
 
         $scope.$watch 'user.passwordConfirmation', (newValue, oldValue) ->
 
@@ -49,17 +26,9 @@ define ['app', 'UserService'], (app) ->
 
                 $scope.passwordMatch = true
 
-        $scope.checkUsernameAvailable = (username) ->
-
-            checkUserDataAvailable username, 'isUserNameAvailable', 'usernameAvailable'
-
-        $scope.checkEmailAvailable = (email) ->
-
-            checkUserDataAvailable email, 'isEmailAvailable', 'emailAvailable'
-
         $scope.register = (user) ->
 
-            if $scope.passwordMatch and $scope.emailAvailable and $scope.usernameAvailable
+            if $scope.passwordMatch and $scope.user.emailAvailable and $scope.user.usernameAvailable
 
                 userService.register(user).then (user) ->
 
