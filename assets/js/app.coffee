@@ -79,7 +79,7 @@ define ['angularAMD', 'classes/CommunicationService', 'classes/UserService'], (a
 
         if window.user
 
-            userService.setCurrentUser window.user
+            userService.setCurrentUser angular.fromJson window.user
 
     ]  
 

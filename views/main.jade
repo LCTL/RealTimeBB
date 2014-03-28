@@ -49,7 +49,7 @@ html
                     }
                 };
                 window.csrf = '#{_csrf}';
-                window.user = !{JSON.stringify(req.session.user)};
+                window.user = '!{JSON.stringify(req.session.user)}';
             })();
 
         // SCRIPTS
