@@ -17,18 +17,29 @@ module.exports.policies = {
   // Default policy for all controllers and actions
   // (`true` allows public access) 
   '/': true,
-  '*.css': true,
-  '*.js': true,
-  '*.html': true,
+  '/assets/**': true,
 
   UserController: {
 
+    find: 'isAdmin',
   	create: 'isAdmin',
+    update: 'isAdmin',
+    destroy: 'isAdmin',
+
   	current: 'isAuthenticated',
 
   	register: true,
   	isEmailAvailable: true,
   	isUsernameAvailable: true
+
+  }, 
+
+  ForumController: {
+
+    find: true,
+    create: 'isAdmin',
+    update: 'isAdmin',
+    destroy: 'isAdmin'
 
   }
 
