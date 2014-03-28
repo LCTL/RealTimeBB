@@ -4,7 +4,7 @@ module.exports =
 
     attributes: 
 
-        threadId: 
+        topicId: 
             type: 'string'
             index: true
             required: true

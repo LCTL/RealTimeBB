@@ -7,6 +7,7 @@ define ['app', 'classes/Module'], (app, Module) ->
             options = {} if not options
             options.classProperties = {} if not options.classProperties
             options.instanceProperties = {} if not options.instanceProperties
+            options.instanceVariable = {} if not options.instanceVariable
 
             defaultOptions = 
 
@@ -64,7 +65,13 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                     findAllByPaginate: (page, limit) ->
 
-                        limit ?= 20
+                        Resource.findAll(Resource.calculateSkipByPage(page), limit)
+
+                    findById: (id) ->
+
+                        Resource.action("/#{id}", null, 'get')
+
+                    calculateSkipByPage: (page, limit = 20) ->
 
                         if not page or page < 1
 
@@ -74,11 +81,7 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                             skip = (page - 1) * limit
 
-                        Resource.findAll(skip, limit)
-
-                    findById: (id) ->
-
-                        Resource.action("/#{id}", null, 'get')
+                        skip
 
                 instanceProperties:
 
@@ -121,8 +124,9 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                 constructor: (data) ->
 
+                    @[key] = value for key, value of defaultOptions.instanceVariable
+
                     if data
 
                         @copyPropertyToInstance data
-
     ]

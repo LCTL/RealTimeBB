@@ -14,6 +14,7 @@ require.config
         'ResourceFactory':      'services/ResourceFactory'
 
         'MainController':       'controllers/MainController'
+        'ForumController':      'controllers/ForumController'
         'RegisterController':   'controllers/RegisterController'
         'LoginController':      'controllers/LoginController'
         'AdminFrameController': 'controllers/AdminFrameController'

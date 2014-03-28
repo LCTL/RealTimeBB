@@ -34,8 +34,9 @@ module.exports.routes = {
   // (This would also work if you had a file at: `/views/home.ejs`)
   '/': {
     view: 'main'
-  }
+  },
 
+  '/forum/:id/topics': 'ForumController.forumTopic'
 
   /*
   // But what if you want your home page to display

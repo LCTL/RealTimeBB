@@ -12,6 +12,10 @@ define ['angularAMD', 'classes/CommunicationService', 'classes/UserService'], (a
             templateUrl: window.assets.template.concat('pages/main.html')
             controller: 'MainController'
 
+        forum = angularAMD.route
+            templateUrl: window.assets.template.concat('pages/forum.html')
+            controller: 'ForumController'
+
         register = angularAMD.route
             templateUrl: window.assets.template.concat('pages/register.html')
             controller: 'RegisterController'
@@ -34,12 +38,14 @@ define ['angularAMD', 'classes/CommunicationService', 'classes/UserService'], (a
 
         $routeSegmentProvider
             .when('/',                              'main')
+            .when('/forum/:id',                     'forum')
             .when('/register',                      'register')
             .when('/login',                         'login')
             .when('/admin',                         'admin')
             .when('/admin/forum-management',        'admin.forum')
             .when('/admin/user-management',         'admin.user')
             .segment('main',                        main)
+            .segment('forum',                       forum)
             .segment('register',                    register)
             .segment('login',                       login)
             .segment('admin',                       admin)
