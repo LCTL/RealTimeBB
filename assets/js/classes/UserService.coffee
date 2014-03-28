@@ -10,34 +10,6 @@ define [], () ->
 
             @$rootScope.user = user
 
-        getCurrentUser: ->
-
-            @promiseTask (deferred) =>
-
-                if @$rootScope.user
-
-                    deferred.resolve @$rootScope.user
-
-                else
-
-                    @communicationService.get('/user/current').then (user) =>
-
-                        @$log.debug user
-
-                        @$rootScope.user = user
-
-                        deferred.resolve user
-
-        checkUserDataAvailable: (data, action) ->
-
-            @promiseTask (deferred) =>
-
-                @communicationService.get("/user/#{action}/#{data}").then (response) =>
-                
-                    @$log.debug response
-
-                    deferred.resolve response
-
         register: (user) ->
 
             @promiseTask (deferred) =>
@@ -48,7 +20,7 @@ define [], () ->
 
                     if data.username
 
-                        @$rootScope.user = data
+                        @setCurrentUser data
                         deferred.resolve data
 
                     else
@@ -63,7 +35,7 @@ define [], () ->
 
                     if user
 
-                        @$rootScope.user = user
+                        @setCurrentUser user
                         deferred.resolve user
 
                     else
@@ -86,11 +58,3 @@ define [], () ->
                     else 
 
                         deferred.reject false
-
-        isEmailAvailable: (email) -> 
-
-            @checkUserDataAvailable email, 'isEmailAvailable'
-
-        isUserNameAvailable: (username) -> 
-
-            @checkUserDataAvailable username, 'isUsernameAvailable'

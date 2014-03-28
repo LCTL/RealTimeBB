@@ -76,10 +76,6 @@ module.exports =
 
         res.json true
 
-    current: (req, res) ->
-
-        res.json req.session.user 
-
     isEmailAvailable: (req, res) ->
 
         isUserDataAvailable(req.param('id'), 'email')
