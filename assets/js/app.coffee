@@ -77,9 +77,9 @@ define ['angularAMD', 'classes/CommunicationService', 'classes/UserService'], (a
 
             userService.logout()
 
-        userService.getCurrentUser().then (user) ->
+        if window.user
 
-            userService.setCurrentUser user
+            userService.setCurrentUser window.user
 
     ]  
 
