@@ -1,7 +1,9 @@
-ModelHelper = require './ModelHelper'
+BaseModelService = require './BaseModelService'
 
-module.exports = 
+class UserService extends BaseModelService
 
-    findAndAssignUser: (userRelatedObjects, asyncCallback) ->
+    constructor: () ->
 
-        ModelHelper.findAndAssignManyToOneRelatedObject userRelatedObjects, User, 'userId', 'user', asyncCallback
+        super User
+
+module.exports = new UserService()

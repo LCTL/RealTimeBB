@@ -20,13 +20,13 @@ module.exports =
 
             , (forum, callback) ->
 
-                ForumService.findForumRelatedObject forum, Topic, skip, limit, (err, topics) ->
+                ForumService.findRelatedObject forum, Topic, skip, limit, (err, topics) ->
 
                     callback err, topics
 
             , (topics, callback) ->
 
-                UserService.findAndAssignUser topics, (err, topics) ->
+                UserService.findAndAssignToObject topics, (err, topics) ->
 
                     callback err, topics
 

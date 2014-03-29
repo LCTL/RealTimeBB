@@ -1,24 +1,9 @@
-ModelHelper = require './ModelHelper'
-Utils = require './Utils'
+BaseModelService = require './BaseModelService'
 
-module.exports = 
+class ForumService extends BaseModelService
 
-    findOneById: (id, asyncCallback) ->
+    constructor: () ->
 
-        ModelHelper.findOneModelById Forum, id, asyncCallback
+        super Forum
 
-    findById: (ids, asyncCallback) ->
-
-        ModelHelper.findModelById Forum, id, asyncCallback
-
-    findAndAssignForum: (forumRelatedObjects, asyncCallback) ->
-
-        ModelHelper.findAndAssignManyToOneRelatedObject forumRelatedObjects, Forum, 'forumId', 'forum', asyncCallback
-
-    findForumRelatedObject: (forums, model, skip, limit, asyncCallback) ->
-
-        ModelHelper.findOneToManyRelatedObject forums, model, 'forumId', skip, limit, asyncCallback
-
-    findAndAssignForumRelatedObject: (forums, model, skip, limit, asyncCallback) ->
-
-        ModelHelper.findAndAssignOneToManyRelatedObject forums, model, 'forumId', model.identity, skip, limit, asyncCallback
+module.exports = new ForumService()
