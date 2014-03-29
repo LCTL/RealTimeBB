@@ -17,7 +17,7 @@ module.exports =
 
         , (err) ->
 
-            if asyncCallback asyncCallback err else deferred.reject err
+            if asyncCallback then asyncCallback err else deferred.reject err
 
         , (notifyMessage) ->
 
