@@ -10,26 +10,22 @@ module.exports =
         skip = req.param 'skip'
         limit = req.param 'limit'
 
-        async.waterfall [
+        ForumService.findOneById(forumId)
 
-            (callback) ->
+        .then (forum) ->
 
-                ForumService.findOneById forumId, (err, forum) ->
+            ForumService.findRelatedObject forum, Topic, skip, limit
 
-                    callback err, forum
+        .then (topics) ->
 
-            , (forum, callback) ->
+            UserService.findAndAssignToObject topics
 
-                ForumService.findRelatedObject forum, Topic, skip, limit, (err, topics) ->
+        .then (topics) ->
 
-                    callback err, topics
+            res.json topics
 
-            , (topics, callback) ->
+        .catch (err) ->
 
-                UserService.findAndAssignToObject topics, (err, topics) ->
+            res.json err
 
-                    callback err, topics
-
-        ], (err, results) ->
-
-            if err then res.json err else res.json results
+        .done()
