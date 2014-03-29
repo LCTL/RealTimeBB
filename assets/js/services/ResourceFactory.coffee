@@ -6,8 +6,8 @@ define ['app', 'classes/Module'], (app, Module) ->
 
             options = {} if not options
             options.classProperties = {} if not options.classProperties
-            options.instanceProperties = {} if not options.instanceProperties
-            options.instanceVariable = {} if not options.instanceVariable
+            options.instanceMethods = {} if not options.instanceMethods
+            options.instanceVariables = {} if not options.instanceVariables
 
             defaultOptions = 
 
@@ -83,7 +83,7 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                         skip
 
-                instanceProperties:
+                instanceMethods:
 
                     save: () ->
 
@@ -120,11 +120,11 @@ define ['app', 'classes/Module'], (app, Module) ->
             class Resource extends Module
 
                 @extend defaultOptions.classProperties
-                @include defaultOptions.instanceProperties
+                @include defaultOptions.instanceMethods
 
                 constructor: (data) ->
 
-                    @[key] = value for key, value of defaultOptions.instanceVariable
+                    @[key] = value for key, value of defaultOptions.instanceVariables
 
                     if data
 

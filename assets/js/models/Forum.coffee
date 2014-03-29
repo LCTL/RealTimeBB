@@ -6,13 +6,13 @@ define ['app', 'ResourceFactory'], (app) ->
 
         resourceFactory basePath, 
 
-            instanceVariable:
+            instanceVariables:
                 topics: null
                 fetchTopicPage: 1
                 fetchTopicLimit: 20
                 fetchingTopic: false
 
-            instanceProperties: 
+            instanceMethods: 
 
                 fetchMoreTopics: () ->
 

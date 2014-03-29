@@ -4,7 +4,7 @@ define ['app', 'ResourceFactory'], (app) ->
 
         resourceFactory '/user',
 
-            instanceProperties: 
+            instanceMethods: 
 
                 isDataAvailable: (data, action) ->
 
