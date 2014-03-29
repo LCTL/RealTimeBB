@@ -7,7 +7,7 @@ define ['app', 'ResourceFactory'], (app) ->
         resourceFactory basePath, 
 
             instanceVariable:
-                topics: []
+                topics: null
                 fetchTopicPage: 1
                 fetchTopicLimit: 20
                 fetchingTopic: false
@@ -26,9 +26,13 @@ define ['app', 'ResourceFactory'], (app) ->
 
                         communicationService.get(path, {skip: skip, limit: @fetchTopicLimit}).then (topics) =>
 
-                            @topics.push topic for topic in topics
+                            if topics
 
-                            @fetchTopicPage++
+                                @topics = [] if not @topics
+
+                                @topics.push topic for topic in topics
+
+                                @fetchTopicPage++
 
                             @fetchingTopic = false
     ]

@@ -8,8 +8,6 @@ define ['app'], (app) ->
 
         Forum.findById($routeParams.id).then (forum) ->
 
-            console.dir forum
-
             $scope.forum = forum
 
             if forum 
