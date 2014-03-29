@@ -41,6 +41,13 @@ module.exports.policies = {
     update: 'isAdmin',
     destroy: 'isAdmin'
 
+  }, 
+
+  TopicController: {
+
+    find: true,
+    create: 'isAuthenticated'
+
   }
 
   /*

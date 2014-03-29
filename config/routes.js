@@ -36,7 +36,8 @@ module.exports.routes = {
     view: 'main'
   },
 
-  '/forum/:id/topics': 'ForumController.forumTopic'
+  '/forum/:id/topics': 'ForumController.findForumTopics',
+  '/topic/:id/posts': 'TopicController.findTopicPosts'
 
   /*
   // But what if you want your home page to display

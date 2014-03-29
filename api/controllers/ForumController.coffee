@@ -4,7 +4,7 @@ module.exports =
 
     _config: {}
 
-    forumTopic: (req, res) ->
+    findForumTopics: (req, res) ->
 
         forumId = req.param 'id'
         skip = req.param 'skip'
