@@ -42,6 +42,24 @@ groupCollection = (objects, groupFieldName, asyncCallback) ->
 
             deferred.resolve objectMap
 
+findAllModel = (model, skip, limit, asyncCallback) ->
+
+    Utils.promiseTask asyncCallback, (deferred) ->
+
+        model.find()
+
+        .skip(skip)
+
+        .limit(limit)
+
+        .then (models) ->
+
+            deferred.resolve models
+
+        .fail (err) ->
+
+            deferred.reject err
+
 findModelById = (model, ids, asyncCallback) ->
 
     _findModelById model, ids, 'find', asyncCallback
@@ -150,6 +168,8 @@ findAndAssignManyToOneRelatedObject = (objects, relatedObjectModel, relatedObjec
 module.exports = 
 
     groupCollection: groupCollection
+
+    findAllModel: findAllModel
 
     findModelById: findModelById
 

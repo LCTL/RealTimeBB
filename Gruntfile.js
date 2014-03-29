@@ -85,6 +85,8 @@ module.exports = function (grunt) {
 
     jsVendorBaseAssetsPath + 'async.js',
 
+    jsVendorBaseAssetsPath + 'markdown.js',
+
     jsVendorBaseAssetsPath + 'require.js',
     jsBaseAssetsPath + 'setup.js'
 
@@ -300,6 +302,11 @@ module.exports = function (grunt) {
           expand: true,
           cwd: bowerBasePath + 'ngInfiniteScroll/',
           src: ['ng-infinite-scroll.js'],
+          dest: jsVendorBaseAssetsPath
+        }, { //bower markdown
+          expand: true,
+          cwd: bowerBasePath + 'markdown/lib',
+          src: ['markdown.js'],
           dest: jsVendorBaseAssetsPath
         }]
       },

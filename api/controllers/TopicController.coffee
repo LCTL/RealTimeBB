@@ -1,6 +1,46 @@
+Q = require 'q'
+
 module.exports = 
 
     _config: {}
+
+    find: (req, res) ->
+
+        topicId = req.param 'id'
+        skip = req.param 'skip'
+        limit = req.param 'limit'
+
+        if topicId 
+
+            TopicService.findOneById(topicId)
+
+            .then (topic) ->
+
+                TopicService.findAndAssignAllRelatedObject topic
+
+            .then (topic) ->
+
+                res.json topic
+
+            .catch (err) ->
+
+                res.json err 
+
+        else 
+
+            TopicService.findAll(skip, limit)
+
+            .then (topic) ->
+
+                TopicService.findAndAssignAllRelatedObject topic
+
+            .then (topic) ->
+
+                res.json topic
+
+            .catch (err) ->
+
+                res.json err 
 
     create: (req, res) ->
 

@@ -11,7 +11,9 @@
                 <tbody>
                     <tr ng-repeat="topic in forum.topics">
                         <td>
-                            <span ng-bind="topic.title"> </span>
+                            <a ng-href="/topic/{{topic.id}}">
+                                <span ng-bind="topic.title"> </span>
+                            </a>
                         </td>
                         <td>
                             <span ng-bind="topic.user.username"> </span>

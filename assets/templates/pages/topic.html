@@ -1,0 +1,24 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12" infinite-scroll="topic.fetchMorePosts()" infinite-scroll-disabled="forum.fetchingPost">
+            <ul class="media-list">
+                <li class="media" ng-repeat="post in topic.posts">
+                    <a class="pull-left" href="#">
+                        <img class="media-object" ng-src="//www.gravatar.com/avatar/{{post.user.gravatar}}?s=64&amp;d=mm" />
+                    </a>
+                    <div class="media-body">
+                        <p data-markdown="post.content"> </p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <form name="form" role="form" novalidate>
+            <div class="col-lg-12">
+                <textarea name="replyPost.content" class="col-lg-12" ng-model="replyPost.content" required> </textarea>
+                <button class="btn btn-primary" ng-click="reply(replyPost)">Send</button>
+            </div>
+        </form>
+    </div>
+</div>

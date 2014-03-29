@@ -1,3 +1,11 @@
+crypto = require 'crypto'
+
+toGravatarHash = (email) ->
+
+    hash = crypto.createHash 'md5'
+    hash.update email.toLowerCase().trim()
+    hash.digest 'hex'
+
 module.exports = 
 
     schema: true
@@ -32,5 +40,10 @@ module.exports =
         toJSON: () ->
 
             obj = @toObject()
+
+            obj.gravatar = toGravatarHash(obj.email)
+
             delete obj.password
+            delete obj.email
+
             return obj

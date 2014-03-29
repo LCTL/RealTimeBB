@@ -6,10 +6,18 @@ module.exports =
 
         constructor: (@modelClass, @modelRelatedObjectIdentity) ->
 
+            @limit = 20
+
             @modelName = @modelClass.identity
             @modelRelatedObjectIdentity = @modelName + 'Id' if not @modelRelatedObjectIdentity
 
             @ModelHelper = ModelHelper
+
+        findAll: (skip, limit, asyncCallback) ->
+
+            limit ?= @limit
+
+            @ModelHelper.findAllModel @modelClass, skip, limit, asyncCallback
 
         findOneById: (id, asyncCallback) ->
 
@@ -24,6 +32,8 @@ module.exports =
             @ModelHelper.findAndAssignManyToOneRelatedObject modelObjects, @modelClass, @modelRelatedObjectIdentity, @modelName, asyncCallback
 
         findRelatedObject: (modelObjects, targetModelClass, skip, limit, asyncCallback) ->
+
+            limit ?= @limit
 
             @ModelHelper.findOneToManyRelatedObject modelObjects, targetModelClass, @modelRelatedObjectIdentity, skip, limit, asyncCallback
 
