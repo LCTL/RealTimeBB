@@ -1,33 +1,15 @@
 ModelHelper = require './ModelHelper'
 Utils = require './Utils'
 
-findById = (id, method, asyncCallback) ->
-
-    Utils.promiseTask asyncCallback, (deferred) ->
-
-        Forum[method]()
-
-        .where
-
-            id: id
-
-        .then (forum) ->
-
-            deferred.resolve forum
-
-        .fail (err) ->
-
-            deferred.reject err
-
 module.exports = 
 
     findOneById: (id, asyncCallback) ->
 
-        findById id, 'findOne', asyncCallback
+        ModelHelper.findOneModelById Forum, id, asyncCallback
 
     findById: (ids, asyncCallback) ->
 
-        findById ids, 'find', asyncCallback
+        ModelHelper.findModelById Forum, id, asyncCallback
 
     findAndAssignForum: (forumRelatedObjects, asyncCallback) ->
 

@@ -1,5 +1,23 @@
 Utils = require './Utils'
 
+_findModelById = (model, ids, method, asyncCallback) ->
+
+    Utils.promiseTask asyncCallback, (deferred) ->
+
+        model[method]()
+
+        .where
+
+            id: ids
+
+        .then (models) ->
+
+            deferred.resolve models
+
+        .fail (err) ->
+
+            deferred.reject err
+
 groupCollection = (objects, groupFieldName, asyncCallback) ->
 
     Utils.promiseTask asyncCallback, (deferred) ->
@@ -22,23 +40,13 @@ groupCollection = (objects, groupFieldName, asyncCallback) ->
 
             deferred.resolve objectMap
 
-findByModelId = (model, ids, asyncCallback) ->
+findModelById = (model, ids, asyncCallback) ->
 
-    Utils.promiseTask asyncCallback, (deferred) ->
+    _findModelById model, ids, 'find', asyncCallback
 
-        model.find()
+findOneModelById = (model, ids, asyncCallback) ->
 
-        .where
-
-            id: ids
-
-        .then (models) ->
-
-            deferred.resolve models
-
-        .fail (err) ->
-
-            deferred.reject err
+    _findModelById model, ids, 'findOne', asyncCallback
 
 findOneToManyRelatedObject = (objects, relatedObjectModel, relatedObjectIdFieldName, skip, limit, asyncCallback) ->
 
@@ -99,7 +107,7 @@ findManyToOneRelatedObject = (objects, relatedObjectModel, relatedObjectIdFieldN
 
                 relatedObjectIds = (key for key, value of objectMap)
 
-                findByModelId relatedObjectModel, relatedObjectIds, (err, relatedObjects) ->
+                findModelById relatedObjectModel, relatedObjectIds, (err, relatedObjects) ->
 
                     callback err, relatedObjects
 
@@ -159,7 +167,9 @@ module.exports =
 
     groupCollection: groupCollection
 
-    findByModelId: findByModelId
+    findModelById: findModelById
+
+    findOneModelById: findOneModelById
 
     findOneToManyRelatedObject: findOneToManyRelatedObject
 
