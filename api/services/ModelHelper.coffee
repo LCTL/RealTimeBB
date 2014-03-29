@@ -22,6 +22,8 @@ groupCollection = (objects, groupFieldName, asyncCallback) ->
 
     Utils.promiseTask asyncCallback, (deferred) ->
 
+        objects = Utils.toArray objects
+
         async.reduce objects, {}
 
         , (objectMap, object, reduceCallback) ->
@@ -52,16 +54,7 @@ findOneToManyRelatedObject = (objects, relatedObjectModel, relatedObjectIdFieldN
 
     Utils.promiseTask asyncCallback, (deferred) ->
 
-        if (not objects) or (not objects?)
-
-            deferred.resolve []
-
-        if not Array.isArray(objects)
-
-            objs = []
-            objs.push objects
-
-            objects = objs
+        objects = Utils.toArray objects
 
         objectIds = (object.id for object in objects when object and object.id)
 
@@ -84,16 +77,7 @@ findManyToOneRelatedObject = (objects, relatedObjectModel, relatedObjectIdFieldN
 
     Utils.promiseTask asyncCallback, (deferred) ->
 
-        if not objects
-
-            deferred.resolve []
-
-        if not Array.isArray(objects)
-
-            objs = []
-            objs.push objects
-
-            objects = objs
+        objects = Utils.toArray objects
 
         async.waterfall [
 

@@ -24,3 +24,18 @@ module.exports =
             deferred.notify notifyMessage
 
         deferred.promise
+
+    toArray: (object) ->
+
+        objects = null
+
+        if not Array.isArray(object)
+
+            objects = []
+            objects.push object
+
+        else 
+
+            objects = object.slice()
+
+        objects
