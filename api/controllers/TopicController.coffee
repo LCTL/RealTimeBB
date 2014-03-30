@@ -20,13 +20,16 @@ module.exports =
                 skip: skip,
                 limit: limit
 
-        promise.then (topic) ->
+        promise.then (topics) ->
 
-            TopicService.findAllAndAssignManyToOneRelatedObject topic
+            Q.all [
+                TopicService.findAllAndAssignManyToOneRelatedObject(topics),
+                TopicService.findAndAssignHeadPost(topics)
+            ]
 
-        .then (topic) ->
+        .then (arrayOfTopics) ->
 
-            res.json topic
+            res.json arrayOfTopics[0]
 
         .catch (err) ->
 
@@ -65,7 +68,6 @@ module.exports =
 
                     deferred.reject
 
-                        status: 500
                         message: "Forum not found"
 
         .then (topic) ->
@@ -76,10 +78,12 @@ module.exports =
                     topicId: topic.id 
                     userId: user.id 
                     content: content
+                    isHead: true
 
                 .then (post) ->
 
                     topic.post = post
+
                     deferred.resolve topic
 
                 .fail (err) ->
@@ -106,11 +110,32 @@ module.exports =
 
         .then (topic) ->
 
-            TopicService.findAndAssignOneToManyRelatedObject topic, Post, skip, limit
+            Utils.promiseTask null, (deferred) ->
+
+                if topic
+
+                    findOptions = 
+                        skip: skip
+                        limit: limit
+                        sort: 'updatedAt DESC'
+
+                    TopicService.findOneToManyRelatedObject(topic, Post, findOptions)
+
+                    .then (posts) ->
+
+                        deferred.resolve posts
+
+                    .fail (err) ->
+
+                        deferred.reject err
+
+                else 
+
+                    deferred.reject []
 
         .then (posts) ->
 
-            TopicService.findAndAssignManyToOneRelatedObject posts, User
+            PostService.findAndAssignManyToOneRelatedObject(posts, User)
 
         .then (posts) ->
 

@@ -25,6 +25,10 @@ module.exports =
 
         deferred.promise
 
+    isArray: (object) ->
+
+        Array.isArray(object)
+
     toArray: (object) ->
 
         objects = null

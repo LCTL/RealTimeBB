@@ -21,6 +21,7 @@ module.exports =
                         topicId: topicId
                         userId: user.id
                         content: content
+                        isHead: false
 
                     .then (post) ->
 

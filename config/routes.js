@@ -26,6 +26,9 @@
  *
  */
 
+controllersConfig = require('./controllers').controllers;
+apiPrefix = controllersConfig.blueprints.prefix;
+
 module.exports.routes = {
 
   // By default, your root route (aka home page) points to a view
@@ -34,10 +37,7 @@ module.exports.routes = {
   // (This would also work if you had a file at: `/views/home.ejs`)
   '/': {
     view: 'main'
-  },
-
-  '/forum/:id/topics': 'ForumController.findForumTopics',
-  '/topic/:id/posts': 'TopicController.findTopicPosts'
+  }
 
   /*
   // But what if you want your home page to display
@@ -97,6 +97,9 @@ module.exports.routes = {
 
   */
 };
+
+module.exports.routes[apiPrefix + '/forum/:id/topics'] = 'ForumController.findForumTopics';
+module.exports.routes[apiPrefix + '/topic/:id/posts'] = 'TopicController.findTopicPosts';
 
 
 

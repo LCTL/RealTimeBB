@@ -1,4 +1,5 @@
 async = require 'async'
+Q = require 'q'
 
 module.exports =
 
@@ -38,17 +39,42 @@ module.exports =
 
         .then (forum) ->
 
-            ForumService.findOneToManyRelatedObject forum, Topic, 
-                skip: skip 
-                limit: limit
+            Utils.promiseTask null, (deferred) ->
+
+                if forum
+
+                    findOptions = 
+                        skip: skip 
+                        limit: limit
+
+                    ForumService.findOneToManyRelatedObject(forum, Topic, findOptions)
+
+                    .then (topics) ->
+
+                        deferred.resolve topics
+
+                    .fail (err) ->
+
+                        deferred.reject []
+
+                else
+
+                    deferred.reject []
 
         .then (topics) ->
 
-            TopicService.findAndAssignManyToOneRelatedObject topics, User
+            findOptions = 
+                where:
+                    isHead: true
 
-        .then (topics) ->
+            Q.all [
+                TopicService.findAllAndAssignManyToOneRelatedObject(topics),
+                TopicService.findAndAssignOneToManyRelatedObject(topics, Post, findOptions)
+            ]
 
-            res.json topics
+        .then (arrayOfTopics) ->
+
+            res.json arrayOfTopics[0]
 
         .catch (err) ->
 

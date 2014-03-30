@@ -1,5 +1,24 @@
 <div class="container-fluid">
-    <div class="row">
+    <section class="row">
+        <div class="col-lg-12">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="/">
+                        <span class="fa fa-home"></span>
+                    </a>
+                </li>
+                <li>
+                    <a ng-href="/forum/{{topic.forum.id}}">
+                        <span ng-bind="topic.forum.name"> </span>
+                    </a>
+                </li>
+                <li>
+                    <span ng-bind="topic.title"> </span>
+                </li>
+            </ol>
+        </div>
+    </section>
+    <section class="row">
         <div class="col-lg-12" infinite-scroll="topic.fetchMorePosts()" infinite-scroll-disabled="forum.fetchingPost">
             <ul class="media-list">
                 <li class="media" ng-repeat="post in topic.posts">
@@ -12,13 +31,15 @@
                 </li>
             </ul>
         </div>
-    </div>
-    <div class="row">
+    </section>
+    <section class="row">
         <form name="form" role="form" novalidate>
             <div class="col-lg-12">
-                <textarea name="replyPost.content" class="col-lg-12" ng-model="replyPost.content" required> </textarea>
-                <button class="btn btn-primary" ng-click="reply(replyPost)">Send</button>
+                <textarea name="content" class="editor" ng-model="replyPost.content" required> </textarea>
+                <section>
+                    <button class="btn btn-primary pull-right" ng-click="reply(replyPost)">Reply</button>
+                </section>
             </div>
         </form>
-    </div>
+    </section>
 </div>

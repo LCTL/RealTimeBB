@@ -23,6 +23,12 @@ module.exports =
 
             modelClass.identity + 'Id'
 
+        createArrayOfObjectFieldName: (modelClass) ->
+
+            modelName = modelClass.identity
+
+            if modelName.slice(-1) is 'y' then modelName.substring(0, modelName.length - 2) + 'ies' else modelName + 's'
+
         findAll: (findOptions, asyncCallback) ->
 
             findOptions ?= {}
@@ -49,7 +55,9 @@ module.exports =
 
         findAndAssignManyToOneRelatedObject: (modelObjects, targetModelClass, asyncCallback) ->
 
-            @ModelHelper.findAndAssignManyToOneRelatedObject modelObjects, targetModelClass, @createRelationshipIdFieldName(targetModelClass), targetModelClass.identity, asyncCallback
+            fieldName = @createRelationshipIdFieldName targetModelClass
+
+            @ModelHelper.findAndAssignManyToOneRelatedObject modelObjects, targetModelClass, fieldName, targetModelClass.identity, asyncCallback
 
         findAllAndAssignManyToOneRelatedObject: (modelObjects, asyncCallback) ->
 
@@ -85,7 +93,9 @@ module.exports =
 
         findAndAssignOneToManyRelatedObject: (modelObjects, targetModelClass, findOptions, asyncCallback) ->
 
-            @ModelHelper.findAndAssignOneToManyRelatedObject modelObjects, targetModelClass, @modelRelatedObjectIdentity, targetModelClass.identity, findOptions, asyncCallback
+            fieldName = @createArrayOfObjectFieldName targetModelClass
+
+            @ModelHelper.findAndAssignOneToManyRelatedObject modelObjects, targetModelClass, @modelRelatedObjectIdentity, fieldName, findOptions, asyncCallback
 
         findAllAndAssignOneToManyRelatedObject: (modelObjects, findOptions, asyncCallback) ->
 

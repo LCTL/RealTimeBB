@@ -8,6 +8,8 @@ define [], () ->
 
             @connectSocket()
 
+            @baseApiUrl = '/api'
+
         connectSocket: ->
 
             if not @connected
@@ -40,7 +42,7 @@ define [], () ->
 
                     angular.extend data, _csrf: @csrf
 
-                @socket[method] path, data, (response) =>
+                @socket[method] @baseApiUrl + path, data, (response) =>
 
                     @$log.debug 'action %s', method
 

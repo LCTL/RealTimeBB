@@ -56,7 +56,7 @@ findAllModel = (model, findOptions = {}, asyncCallback) ->
 
             deferred.reject err
 
-countAllModel = (model, findOptions  = {}, asyncCallback) ->
+countAllModel = (model, findOptions = {}, asyncCallback) ->
 
     Utils.promiseTask asyncCallback, (deferred) ->
 
@@ -78,13 +78,13 @@ findOneModelById = (model, ids, asyncCallback) ->
 
     _findModelById model, ids, 'findOne', asyncCallback
 
-findOneToManyRelatedObject = (objects, relatedObjectModelClass, relatedObjectIdFieldName, findOptions, asyncCallback) ->
+findOneToManyRelatedObject = (objects, relatedObjectModelClass, relatedObjectIdFieldName, findOptions = {}, asyncCallback) ->
 
     Utils.promiseTask asyncCallback, (deferred) ->
 
         objects = Utils.toArray objects
-        findOptions ?= {}
-        findOptions[relatedObjectIdFieldName] = (object.id for object in objects when object and object.id)
+        findOptions.where ?= {}
+        findOptions.where[relatedObjectIdFieldName] = (object.id for object in objects when object and object.id)
 
         findAllModel(relatedObjectModelClass, findOptions)
 
@@ -134,6 +134,10 @@ findAndAssignOneToManyRelatedObject = (objects, relatedObjectModelClass, related
 
             groupCollection relatedObjects, relatedObjectIdFieldName, (err, relatedObjectMap) ->
 
+                isArray = Utils.isArray objects
+
+                objects = Utils.toArray objects
+
                 if relatedObjectMap
 
                     for object in objects
@@ -145,6 +149,8 @@ findAndAssignOneToManyRelatedObject = (objects, relatedObjectModelClass, related
                         else 
 
                             object[relatedObjectFieldName] = []
+
+                objects = objects[0] if objects.length == 1 and not isArray 
 
                 deferred.resolve objects
 

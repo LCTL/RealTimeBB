@@ -1,0 +1,32 @@
+<div class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="$hide()">&times;</button>
+                <h4 class="modal-title">New Topic</h4>
+            </div>
+            <form name="form" role="form" novalidate>
+                <div class="modal-body">
+                    <div class="form-group" ng-class="{'has-error': form.title.$dirty &amp;&amp; form.title.$invalid}">
+                        <label for="title">Title</label>
+                        <input type="text" ng-model="topic.title" name="title" class="form-control" placeholder="Title" maxlength="100" required />
+                        <div ng-show="form.title.$dirty">
+                            <p ng-show="form.title.$error.required" class="text-danger">Cannot be null or empty</p>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error': (form.content.$dirty &amp;&amp; form.content.$invalid) || !user.contentAvailable}">
+                        <label for="content">Content</label>
+                        <textarea type="text" class="form-control editor" name="content" placeholder="Markdown Content" ng-model="topic.content" maxlength="5000" required></textarea>
+                        <div ng-show="form.content.$dirty">
+                            <p ng-show="form.content.$error.required" class="text-danger">Cannot be null or empty</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$hide()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="createTopic(topic)" ng-disabled="form.title.$invalid || form.content.$invalid">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

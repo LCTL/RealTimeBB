@@ -18,3 +18,8 @@ module.exports =
             type: 'string'
             required: true
             maxLength: 5000
+
+        isHead:
+            type: 'boolean'
+            defaultsTo: false
+            required: true

@@ -20,6 +20,7 @@ define ['app', 'Markdown', 'Topic', 'Post'], (app) ->
 
             post.save().then (post) ->
 
+                $scope.topic.posts ?= []
                 $scope.topic.posts.push post
 
                 $scope.replyPost = Post.create
