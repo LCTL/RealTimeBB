@@ -39,7 +39,7 @@ module.exports =
 
         .then (post) ->
 
-            UserService.findAndAssignToObject post
+            PostService.findAndAssignManyToOneRelatedObject post, User
 
         .then (post) ->
 

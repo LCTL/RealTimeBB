@@ -12,35 +12,25 @@ module.exports =
 
         if topicId 
 
-            TopicService.findOneById(topicId)
-
-            .then (topic) ->
-
-                TopicService.findAndAssignAllRelatedObject topic
-
-            .then (topic) ->
-
-                res.json topic
-
-            .catch (err) ->
-
-                res.json err 
+            promise = TopicService.findOneById(topicId)
 
         else 
 
-            TopicService.findAll(skip, limit)
+            promise = TopicService.findAll 
+                skip: skip,
+                limit: limit
 
-            .then (topic) ->
+        promise.then (topic) ->
 
-                TopicService.findAndAssignAllRelatedObject topic
+            TopicService.findAllAndAssignManyToOneRelatedObject topic
 
-            .then (topic) ->
+        .then (topic) ->
 
-                res.json topic
+            res.json topic
 
-            .catch (err) ->
+        .catch (err) ->
 
-                res.json err 
+            res.json err 
 
     create: (req, res) ->
 
@@ -116,11 +106,11 @@ module.exports =
 
         .then (topic) ->
 
-            TopicService.findRelatedObject topic, Post, skip, limit
+            TopicService.findAndAssignOneToManyRelatedObject topic, Post, skip, limit
 
         .then (posts) ->
 
-            UserService.findAndAssignToObject posts
+            TopicService.findAndAssignManyToOneRelatedObject posts, User
 
         .then (posts) ->
 

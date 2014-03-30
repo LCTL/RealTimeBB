@@ -4,6 +4,7 @@ class ForumService extends BaseModelService
 
     constructor: () ->
 
-        super Forum
+        super Forum, 
+            oneToManyModelClasses: [Topic]
 
 module.exports = new ForumService()

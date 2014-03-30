@@ -42,15 +42,25 @@ groupCollection = (objects, groupFieldName, asyncCallback) ->
 
             deferred.resolve objectMap
 
-findAllModel = (model, skip, limit, asyncCallback) ->
+findAllModel = (model, findOptions = {}, asyncCallback) ->
 
     Utils.promiseTask asyncCallback, (deferred) ->
 
-        model.find()
+        model.find(findOptions)
 
-        .skip(skip)
+        .then (models) ->
 
-        .limit(limit)
+            deferred.resolve models
+
+        .fail (err) ->
+
+            deferred.reject err
+
+countAllModel = (model, findOptions  = {}, asyncCallback) ->
+
+    Utils.promiseTask asyncCallback, (deferred) ->
+
+        model.count(findOptions)
 
         .then (models) ->
 
@@ -68,21 +78,16 @@ findOneModelById = (model, ids, asyncCallback) ->
 
     _findModelById model, ids, 'findOne', asyncCallback
 
-findOneToManyRelatedObject = (objects, relatedObjectModel, relatedObjectIdFieldName, skip, limit, asyncCallback) ->
+findOneToManyRelatedObject = (objects, relatedObjectModelClass, relatedObjectIdFieldName, findOptions, asyncCallback) ->
 
     Utils.promiseTask asyncCallback, (deferred) ->
 
         objects = Utils.toArray objects
+        findOptions ?= {}
+        findOptions[relatedObjectIdFieldName] = (object.id for object in objects when object and object.id)
 
-        objectIds = (object.id for object in objects when object and object.id)
+        findAllModel(relatedObjectModelClass, findOptions)
 
-        whereClause = {}
-        whereClause[relatedObjectIdFieldName] = objectIds
-
-        relatedObjectModel.find()
-        .where(whereClause)
-        .skip(skip)
-        .limit(limit)
         .then (relatedObjects) ->
 
             deferred.resolve relatedObjects
@@ -91,41 +96,39 @@ findOneToManyRelatedObject = (objects, relatedObjectModel, relatedObjectIdFieldN
 
             deferred.reject err
 
-findManyToOneRelatedObject = (objects, relatedObjectModel, relatedObjectIdFieldName, asyncCallback) ->
+findManyToOneRelatedObject = (objects, relatedObjectModelClass, relatedObjectIdFieldName, asyncCallback) ->
 
     Utils.promiseTask asyncCallback, (deferred) ->
 
         objects = Utils.toArray objects
 
-        async.waterfall [
+        groupCollection(objects, relatedObjectIdFieldName)
 
-            (callback) ->
+        .then (objectMap) ->
 
-                groupCollection objects, relatedObjectIdFieldName, (err, objectMap) ->
+            relatedObjectIds = (key for key, value of objectMap)
 
-                    callback err, objectMap
+            findModelById relatedObjectModelClass, relatedObjectIds
 
-            , (objectMap, callback) ->
+        .then (relatedObjects) ->
 
-                relatedObjectIds = (key for key, value of objectMap)
+            deferred.resolve relatedObjects
 
-                findModelById relatedObjectModel, relatedObjectIds, (err, relatedObjects) ->
+        .catch (err) ->
 
-                    callback err, relatedObjects
+            deferred.reject err
 
-        ], (err, results) ->
+        .done()
 
-            if err then deferred.reject err else deferred.resolve results
-
-findAndAssignOneToManyRelatedObject = (objects, relatedObjectModel, relatedObjectIdFieldName, relatedObjectFieldName, skip, limit, asyncCallback) ->
+findAndAssignOneToManyRelatedObject = (objects, relatedObjectModelClass, relatedObjectIdFieldName, relatedObjectFieldName, findOptions, asyncCallback) ->
 
     Utils.promiseTask asyncCallback, (deferred) ->
 
-        findOneToManyRelatedObject object, relatedObjectModel, relatedObjectIdFieldName, skip, limit, (err, relatedObjects) ->
+        findOneToManyRelatedObject objects, relatedObjectModelClass, relatedObjectIdFieldName, findOptions, (err, relatedObjects) ->
 
             if err 
 
-                deferred.reject objects
+                deferred.reject err
 
                 return
 
@@ -145,17 +148,15 @@ findAndAssignOneToManyRelatedObject = (objects, relatedObjectModel, relatedObjec
 
                 deferred.resolve objects
 
-findAndAssignManyToOneRelatedObject = (objects, relatedObjectModel, relatedObjectIdFieldName, relatedObjectFieldName, asyncCallback) ->
+findAndAssignManyToOneRelatedObject = (objects, relatedObjectModelClass, relatedObjectIdFieldName, relatedObjectFieldName, asyncCallback) ->
 
     Utils.promiseTask asyncCallback, (deferred) ->
 
         groupCollection objects, relatedObjectIdFieldName, (err, objectMap) ->
 
-            findManyToOneRelatedObject objects, relatedObjectModel, relatedObjectIdFieldName, (err, relatedObjects) ->
+            findManyToOneRelatedObject objects, relatedObjectModelClass, relatedObjectIdFieldName, (err, relatedObjects) ->
 
-                if relatedObjects
-
-                    fieldName = relatedObjectModel
+                if relatedObjects?.length > 0
 
                     for relatedObject in relatedObjects
 
@@ -170,6 +171,8 @@ module.exports =
     groupCollection: groupCollection
 
     findAllModel: findAllModel
+
+    countAllModel: countAllModel
 
     findModelById: findModelById
 
