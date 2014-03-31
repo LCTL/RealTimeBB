@@ -48,6 +48,13 @@ module.exports.policies = {
     find: true,
     create: 'isAuthenticated'
 
+  },
+
+  PostController: {
+
+    find: true,
+    create: 'isAuthenticated'
+
   }
 
   /*
