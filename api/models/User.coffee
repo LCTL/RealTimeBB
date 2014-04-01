@@ -32,9 +32,9 @@ module.exports =
             required: true
             maxLength: 100
 
-        isAdmin:
-            type: 'boolean'
-            defaultsTo: false
+        roles:
+            type: 'array'
+            defaultsTo: ['user']
             required: true
 
         toJSON: () ->
@@ -44,6 +44,13 @@ module.exports =
             obj.gravatar = toGravatarHash(obj.email)
 
             delete obj.password
-            delete obj.email
+
+            if not @_showEmail
+
+                delete obj.email
 
             return obj
+
+        setShowEmail: (showEmail) ->
+
+            @_showEmail = showEmail

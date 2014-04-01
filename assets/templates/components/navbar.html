@@ -25,7 +25,7 @@
                         <li>
                             <a href="#">Profile</a>
                         </li>
-                        <li ng-show="$root.user.isAdmin">
+                        <li ng-show="$root.user.roles.indexOf('admin') != -1">
                             <a href="/admin">Admin Console</a>
                         </li>
                         <li>

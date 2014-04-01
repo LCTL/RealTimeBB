@@ -1,9 +1,17 @@
+async = require 'async'
+
 module.exports = (req, res, next) ->
 
     user = req.session.user
 
-    if user and user.isAdmin
+    if user
 
-        return next()
+        async.some user.roles
 
-    res.forbidden 'You are not permitted to perform this action.'
+        , (role, callback) ->
+
+            callback role is 'admin'
+
+        , (result) ->
+
+            if result then next() else res.forbidden 'You are not permitted to perform this action.'

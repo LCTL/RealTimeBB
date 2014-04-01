@@ -31,6 +31,54 @@ module.exports =
 
     _config: {}
 
+    find: (req, res) ->
+
+        userId = req.param 'id'
+        skip = req.param 'skip'
+        limit = req.param 'limit'
+
+        if userId 
+
+            promise = UserService.findOneById(userId)
+
+        else 
+
+            promise = UserService.findAll
+                skip: skip,
+                limit: limit
+
+        promise.then (users) ->
+
+            Utils.promiseTask null, (deferred) ->
+
+                if Utils.isArray(users)
+
+                    async.each users
+
+                    , (user, callback) ->
+
+                        user.setShowEmail true
+
+                        callback null
+
+                    , (err) ->
+
+                        if err then deferred.reject err else deferred.resolve users
+
+                else 
+
+                    user.setShowEmail true
+
+                    deferred.resolve users
+
+        .then (users) ->
+
+            res.json users
+
+        .catch (err) ->
+
+            res.json err 
+
     create: (req, res) ->
 
         data = req.params.all()
