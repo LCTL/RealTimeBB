@@ -1,8 +1,15 @@
-define ['angularAMD', 'classes/CommunicationService', 'classes/UserService'], (angularAMD, CommunicationService, UserService) ->
+define ['angularAMD', 'classes/CommunicationService', 'classes/UserService', 'classes/RouteRestrictionServiceProvider'], (angularAMD, CommunicationService, UserService, RouteRestrictionServiceProvider) ->
 
     app = angular.module 'webapp', ['ngRoute', 'route-segment', 'view-segment', 'ngAnimate', 'mgcrea.ngStrap', 'infinite-scroll']
 
-    app.config ['$routeProvider',  '$routeSegmentProvider', '$locationProvider', '$injector', ($routeProvider, $routeSegmentProvider, $locationProvider, $injector) ->
+    app.value 'socket.io', window.io
+    app.value 'csrf', window.csrf
+
+    app.provider 'RouteRestrictionService', new RouteRestrictionServiceProvider()
+    app.service 'CommunicationService', CommunicationService
+    app.service 'UserService', UserService
+
+    app.config ['$routeProvider',  '$routeSegmentProvider', '$locationProvider', '$injector', 'RouteRestrictionServiceProvider', ($routeProvider, $routeSegmentProvider, $locationProvider, $injector, routeRestrictionServiceProvider) ->
 
         $locationProvider.html5Mode(true).hashPrefix('!')
 
@@ -62,13 +69,13 @@ define ['angularAMD', 'classes/CommunicationService', 'classes/UserService'], (a
 
         $routeProvider.otherwise redirectTo: '/'
 
+        routeRestrictionServiceProvider.loginPage = '/login'
+        routeRestrictionServiceProvider.restricts.push 
+            segment: 'admin'
+            roles: ['admin']
+
     ]
-
-    app.value 'socket.io', window.io
-    app.value 'csrf', window.csrf
-
-    app.service 'CommunicationService', CommunicationService
-    app.service 'UserService', UserService
+    
     app.factory 'promiseTask', ['$q', ($q) ->
 
         (task) ->
@@ -81,13 +88,15 @@ define ['angularAMD', 'classes/CommunicationService', 'classes/UserService'], (a
 
     ]
 
-    app.run ['$rootScope', 'UserService', ($rootScope, userService) ->
+    app.run ['$rootScope', '$location', 'UserService', 'RouteRestrictionService', ($rootScope, $location, userService, routeRestrictionService) ->
 
         $rootScope.navbarTemplateUrl = window.assets.template.concat('components/navbar.html')
         
         $rootScope.logout = () ->
 
-            userService.logout()
+            userService.logout().then () ->
+
+                $location.path '/'
 
         if window.user
 

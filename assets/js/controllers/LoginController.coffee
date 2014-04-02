@@ -10,7 +10,17 @@ define ['app', 'UserService'], (app) ->
 
         loginSuccessCallback = (user) ->
 
-            $location.path '/'
+            if $rootScope.prevPath  
+
+                prevPath = $rootScope.prevPath
+
+                $rootScope.prevPath = undefined
+
+                $location.path prevPath 
+
+            else
+
+                $location.path '/'
 
         loginFailureCallback = () ->
 

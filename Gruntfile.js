@@ -85,6 +85,8 @@ module.exports = function (grunt) {
     jsVendorBaseAssetsPath + 'sails.io.js',
 
     jsVendorBaseAssetsPath + 'async.js',
+    jsVendorBaseAssetsPath + 'underscore.js',
+    jsVendorBaseAssetsPath + 'underscore.string.js',
 
     jsVendorBaseAssetsPath + 'markdown.js',
 
@@ -308,6 +310,16 @@ module.exports = function (grunt) {
           expand: true,
           cwd: bowerBasePath + 'markdown/lib',
           src: ['markdown.js'],
+          dest: jsVendorBaseAssetsPath
+        }, { //bower underscore
+          expand: true,
+          cwd: bowerBasePath + 'underscore',
+          src: ['underscore.js'],
+          dest: jsVendorBaseAssetsPath
+        }, { //bower underscore.string
+          expand: true,
+          cwd: bowerBasePath + 'underscore.string/lib',
+          src: ['underscore.string.js'],
           dest: jsVendorBaseAssetsPath
         }]
       },

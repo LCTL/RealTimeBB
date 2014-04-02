@@ -6,6 +6,10 @@ define ['app', 'ResourceFactory'], (app) ->
 
             instanceMethods: 
 
+                hasRole: (role) ->
+
+                    if @roles then $root.user.roles.indexOf(role) != -1 else false 
+
                 isDataAvailable: (data, action) ->
 
                     promiseTask (deferred) =>

@@ -6,9 +6,33 @@ define [], () ->
 
         constructor: (@$log, @$rootScope, @communicationService, @promiseTask) ->
 
+        isLoggedIn: () ->
+
+            if @$rootScope.user then true else false
+
         setCurrentUser: (user) ->
 
             @$rootScope.user = user
+
+        hasRoles: (roles) ->
+
+            if @isLoggedIn() and @$rootScope.user.roles
+
+                if _.isArray(roles) 
+
+                    for role in roles
+
+                        result = _.contains @$rootScope.user.roles, role
+
+                        return result if result
+
+                else 
+
+                    return _.contains @$rootScope.user.roles, role
+
+            else
+
+                false 
 
         register: (user) ->
 
