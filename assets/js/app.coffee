@@ -1,6 +1,6 @@
 define ['angularAMD', 'classes/CommunicationService', 'classes/UserService', 'classes/RouteRestrictionServiceProvider'], (angularAMD, CommunicationService, UserService, RouteRestrictionServiceProvider) ->
 
-    app = angular.module 'webapp', ['ngRoute', 'route-segment', 'view-segment', 'ngAnimate', 'mgcrea.ngStrap', 'infinite-scroll']
+    app = angular.module 'webapp', ['ngRoute', 'route-segment', 'view-segment', 'ngAnimate', 'mgcrea.ngStrap', 'infinite-scroll', 'ngProgress']
 
     app.value 'socket.io', window.io
     app.value 'csrf', window.csrf
@@ -88,7 +88,7 @@ define ['angularAMD', 'classes/CommunicationService', 'classes/UserService', 'cl
 
     ]
 
-    app.run ['$rootScope', '$location', 'UserService', 'RouteRestrictionService', ($rootScope, $location, userService, routeRestrictionService) ->
+    app.run ['$rootScope', '$location', 'ngProgress', 'UserService', 'RouteRestrictionService', ($rootScope, $location, ngProgress, userService, routeRestrictionService) ->
 
         $rootScope.navbarTemplateUrl = window.assets.template.concat('components/navbar.html')
         
@@ -101,6 +101,15 @@ define ['angularAMD', 'classes/CommunicationService', 'classes/UserService', 'cl
         if window.user
 
             userService.setCurrentUser angular.fromJson window.user
+
+        $rootScope.$on '$routeChangeStart', (event, current, previous) ->
+
+            ngProgress.start()
+
+        $rootScope.$on '$routeChangeSuccess', (event, current, previous) ->
+
+            ngProgress.complete()
+
 
     ]  
 

@@ -48,6 +48,7 @@ module.exports = function (grunt) {
     styleBaseAssetsPath + 'bootstrap-theme.css',
     styleBaseAssetsPath + 'font-awesome.css',
     styleBaseAssetsPath + 'angular-motion.css',
+    styleBaseAssetsPath + 'ngProgress.css',
     styleBaseAssetsPath + 'sidebar.css',
     styleBaseAssetsPath + 'commons.css'
   ];
@@ -77,6 +78,7 @@ module.exports = function (grunt) {
     jsVendorBaseAssetsPath + 'angular-strap.js', 
     jsVendorBaseAssetsPath + 'angular-strap.tpl.js',
     jsVendorBaseAssetsPath + 'ng-infinite-scroll.js',
+    jsVendorBaseAssetsPath + 'ngprogress.js',
 
     // Bring in the socket.io client
     jsVendorBaseAssetsPath + 'socket.io.js',
@@ -321,6 +323,16 @@ module.exports = function (grunt) {
           cwd: bowerBasePath + 'underscore.string/lib',
           src: ['underscore.string.js'],
           dest: jsVendorBaseAssetsPath
+        }, { //bower ngprogress
+          expand: true,
+          cwd: bowerBasePath + 'ngprogress/build',
+          src: ['ngprogress.js'],
+          dest: jsVendorBaseAssetsPath
+        }, { //bower ngprogress
+          expand: true,
+          cwd: bowerBasePath + 'ngprogress',
+          src: ['ngprogress.css'],
+          dest: styleBaseAssetsPath
         }]
       },
       build: {
