@@ -1,43 +1,73 @@
 define ['app', 'Forum', 'Topic'], (app) ->
 
-    app.register.controller 'ForumController', ['$rootScope', '$scope', '$routeParams', '$location', '$modal', 'Forum', 'Topic', ($rootScope, $scope, $routeParams, $location, $modal, Forum, Topic) ->
+    app.register.controller 'ForumController', [
+            '$rootScope', '$scope', '$routeParams', '$location', '$modal', '$alert', 
+            '$sce', '$timeout', 'UserService', 'Forum', 'Topic', 
+            ($rootScope, $scope, $routeParams, $location, $modal, $alert, $sce, $timeout, userService, Forum, Topic) ->
 
-        $rootScope.pageTitle = "Admin Console"
+                $rootScope.pageTitle = "Admin Console"
 
-        $scope.forum = null
+                $scope.forum = null
 
-        newTopicModal = null
+                newTopicModal = null
+                loginAlert = null
 
-        Forum.findById($routeParams.id).then (forum) ->
+                Forum.findById($routeParams.id).then (forum) ->
 
-            $scope.forum = forum
+                    $scope.forum = forum
 
-            if forum 
+                    if forum 
 
-                forum.fetchMoreTopics()
+                        forum.fetchMoreTopics()
 
-        $scope.showNewTopicModal = () ->
+                $scope.showNewTopicModal = () ->
 
-            $scope.topic = Topic.create()
-            $scope.topic.forumId = $scope.forum.id
+                    if userService.isLoggedIn()
 
-            if not newTopicModal
+                        $scope.topic = Topic.create()
+                        $scope.topic.forumId = $scope.forum.id
 
-                newTopicModal = $modal
-                    show: false
-                    scope: $scope
-                    template: window.assets.template.concat('components/new-topic-modal.html')
+                        if not newTopicModal
 
-            newTopicModal.$promise.then () ->
+                            newTopicModal = $modal
+                                show: false
+                                scope: $scope
+                                template: window.assets.template.concat('components/new-topic-modal.html')
 
-                newTopicModal.show()
+                        newTopicModal.$promise.then () ->
 
-        $scope.createTopic = (topic) ->
+                            newTopicModal.show()
 
-            topic.save().then (topic) ->
+                    else 
 
-                newTopicModal.hide()
+                        if not loginAlert
 
-                $location.path "/topic/#{topic.id}"
+                            loginAlert = $alert 
 
+                                template: window.assets.template.concat('components/login-alert.html')
+                                #content: $sce.trustAsHtml 'Please click <a href="#" ng-click="toLoginPage()">here<a/> to login.'
+                                type: 'warning'
+                                placement: 'top'
+                                show: false
+
+                        loginAlert.$promise.then () ->
+
+                            loginAlert.toggle()
+
+
+                            ###
+                            $timeout () ->
+
+                                loginAlert.hide()
+
+                            , 5000
+                            ###
+
+                $scope.createTopic = (topic) ->
+
+                    topic.save().then (topic) ->
+
+                        newTopicModal.hide()
+
+                        $location.path "/topic/#{topic.id}"
     ]

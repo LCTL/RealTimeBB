@@ -5,7 +5,7 @@ define ['angularAMD', 'classes/CommunicationService', 'classes/UserService', 'cl
     app.value 'socket.io', window.io
     app.value 'csrf', window.csrf
 
-    app.provider 'RouteRestrictionService', new RouteRestrictionServiceProvider()
+    app.provider 'RouteRestrictionService', RouteRestrictionServiceProvider
     app.service 'CommunicationService', CommunicationService
     app.service 'UserService', UserService
 
@@ -97,6 +97,10 @@ define ['angularAMD', 'classes/CommunicationService', 'classes/UserService', 'cl
             userService.logout().then () ->
 
                 $location.path '/'
+
+        $rootScope.toLoginPage = () ->
+
+            routeRestrictionService.toLoginPage()
 
         if window.user
 

@@ -1,5 +1,25 @@
 define [], () ->
 
+    class RouteRestrictionService
+
+        constructor: (@$rootScope, @$location, @userService, @loginPage, @restricts) ->
+
+        toLoginPage: () ->
+
+            @$rootScope.prevPath = @$location.path()
+
+            @$location.path @loginPage
+
+        $routeChangeStart: (next, current) ->
+
+            for restrict in @restricts
+
+                if _.str.startsWith current.$$route.segment, restrict.segment
+
+                    @$rootScope.prevPath = current.$$route.originalPath
+
+                    @$location.path @loginPage if not @userService.hasRoles restrict.roles
+
     class RouteRestrictionServiceProvider
 
         constructor: () ->
@@ -9,14 +29,14 @@ define [], () ->
 
         $get: ['$rootScope', '$location', 'UserService', ($rootScope, $location, userService) ->
 
-            $rootScope.$on '$routeChangeStart', (next, current) =>
+            routeRestrictionService = new RouteRestrictionService $rootScope, $location, userService, @loginPage, @restricts
 
-                for restrict in @restricts
+            $rootScope.$on '$routeChangeStart', (next, current) ->
 
-                    if _.str.startsWith current.$$route.segment, restrict.segment
+                routeRestrictionService.$routeChangeStart next, current
 
-                        $rootScope.prevPath = current.$$route.originalPath
-
-                        $location.path @loginPage if not userService.hasRoles restrict.roles
+            routeRestrictionService
 
         ]
+
+    return new RouteRestrictionServiceProvider()

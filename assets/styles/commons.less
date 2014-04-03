@@ -6,3 +6,25 @@ section {
     width: 100%;
     min-height: 200px;
 }
+
+.alert {
+
+    &.top, .top-right, .top-left{
+        display: block;
+        position: fixed;
+        margin: 15px;
+        top: 50px;
+        right:0;
+        left:0;
+        z-index: 99999;
+    }
+
+    &.top-left {
+        left: 0px;
+    }
+
+    &.top-right {
+        right: 0px;
+    }
+
+}
