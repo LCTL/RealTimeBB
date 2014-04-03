@@ -2,9 +2,9 @@ define [], () ->
 
     class CommunicationService
 
-        @$inject: ['$log', 'socket.io', 'csrf', 'promiseTask']
+        @$inject: ['$rootScope', '$log', 'socket.io', 'csrf', 'promiseTask']
 
-        constructor: (@$log, @io, @csrf, @promiseTask) ->
+        constructor: (@$rootScope, @$log, @io, @csrf, @promiseTask) ->
 
             @connectSocket()
 
@@ -21,6 +21,8 @@ define [], () ->
                     @$log.debug 'socket connected'
 
                     @connected = true
+
+                    @listenEvent 'message'
 
                 @socket.on 'disconnect', =>
 
@@ -44,19 +46,11 @@ define [], () ->
 
                 @socket[method] @baseApiUrl + path, data, (response) =>
 
-                    @$log.debug 'action %s', method
-
-                    @$log.debug response
-
                     if response and response.status and (response.status >= 300 or response.status < 200)
-
-                        @$log.debug 'reject'
 
                         deferred.reject response
 
                     else
-
-                        @$log.debug 'resolve'
 
                         deferred.resolve response
 
@@ -76,45 +70,11 @@ define [], () ->
 
             @action(path, data, 'delete')
 
-        addListener: (event, filter, listener) ->
+        listenEvent: (eventName) ->
 
-            wrapper = 
+            @socket.on eventName, (message) =>
 
-                filter: filter
-
-                listener: listener
-
-            if not @listeners[event]
-
-                @listeners[event] = []
-
-                @socket.on event, (message) =>
-
-                    eventIterator = (wrapper, callback) ->
-
-                        #TODO compare message data is equal filter specific value
-
-                        wrapper.listener message
-
-                        callback false
-
-                    async.each @listeners[event], eventIterator, (error) =>
-
-                        @$log.error error if error
-
-            @listeners[event].push wrapper
-
-        removeListener: (event, listener) ->
-
-            if @listeners[event]
-
-                iterator = (wrapper, callback) =>
-
-                    if wrapper.listener == listener then callback(false) else callback(true)
-
-                async.filter @listeners[event], iterator, (results) =>
-
-                    @listeners[event] = results
+                @$rootScope.$broadcast eventName, message
 
         emit: (event, message) ->
 
