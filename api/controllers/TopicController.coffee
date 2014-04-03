@@ -119,7 +119,7 @@ module.exports =
                         limit: limit
                         where: 
                             isHead: false
-                        sort: 'updatedAt DESC'
+                        sort: 'updatedAt ASC'
 
                     TopicService.findOneToManyRelatedObject(topic, Post, findOptions)
 
