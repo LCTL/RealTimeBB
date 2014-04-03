@@ -30,7 +30,7 @@
                             <h4 class="timeline-title" ng-bind="topic.title"></h4>
                         </div>
                         <div class="timeline-body">
-                            <p data-markdown="topic.headPost.content"></p>
+                            <p data-markdown="topic.headPost.content" class="markdown"></p>
                             <hr />
                             <p>
                                 <small class="text-muted">
@@ -49,7 +49,7 @@
                     </div>
                     <div class="timeline-panel">
                         <div class="timeline-body">
-                            <p data-markdown="post.content"></p>
+                            <p data-markdown="post.content" class="markdown"></p>
                             <hr />
                             <p>
                                 <small class="text-muted">
@@ -66,13 +66,41 @@
         </div>
     </section>
     <section class="row">
-        <form name="form" role="form" novalidate>
-            <div class="col-lg-12">
-                <textarea name="content" class="editor" ng-model="replyPost.content" required> </textarea>
-                <section>
-                    <button class="btn btn-primary pull-right" ng-click="reply(replyPost)">Reply</button>
-                </section>
-            </div>
-        </form>
+        <div class="col-lg-12 col-md-12">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#editor" data-toggle="tab">Editor</a>
+                </li>
+                <li class="hidden-md hidden-lg">
+                    <a href="#preview" data-toggle="tab">Preview</a>
+                </li>
+            </ul>
+
+            <section class="tab-content">
+                <div id="editor" class="tab-pane active">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <form name="form" role="form" novalidate>
+                                <div class="form-group" ng-class="{'has-error': form.content.$dirty &amp;&amp; form.content.$invalid}">
+                                    <textarea name="content" class="editor" ng-model="replyPost.content" placeholder="Markdown Content" ng-maxlength="5000" required> </textarea>
+                                    <div ng-show="form.content.$dirty">
+                                        <p ng-show="form.content.$error.maxlength" class="text-danger">Over 5000 character</p>
+                                    </div>
+                                </div>
+                                <section>
+                                    <button class="btn btn-primary pull-right" ng-click="reply(replyPost)" ng-disabled="form.$invalid">Reply</button>
+                                </section>
+                            </form>
+                        </div>
+                        <div class="col-lg-6 col-md-6 hidden-xs hidden-sm">
+                            <p data-markdown="replyPost.content" class="markdown"> </p>
+                        </div>
+                    </div>
+                </div>
+                <div id="preview" class="tab-pane">
+                    <p data-markdown="replyPost.content" class="markdown"> </p>
+                </div>
+            </section>
+        </div>
     </section>
 </div>
