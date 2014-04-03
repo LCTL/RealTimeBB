@@ -8,5 +8,5 @@ define ['app'], (app) ->
 
             scope.$watch attrs.markdown, (newValue, oldValue) ->
 
-                htmlText = markdown.toHTML newValue
+                htmlText = if newValue then markdown.toHTML newValue else ''
                 element.html htmlText

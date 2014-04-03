@@ -1,6 +1,6 @@
 define ['angularAMD', 'classes/CommunicationService', 'classes/UserService', 'classes/RouteRestrictionServiceProvider'], (angularAMD, CommunicationService, UserService, RouteRestrictionServiceProvider) ->
 
-    app = angular.module 'webapp', ['ngRoute', 'route-segment', 'view-segment', 'ngAnimate', 'mgcrea.ngStrap', 'infinite-scroll', 'ngProgress']
+    app = angular.module 'webapp', ['ngRoute', 'route-segment', 'view-segment', 'ngAnimate', 'mgcrea.ngStrap', 'infinite-scroll', 'ngProgress', 'angularMoment']
 
     app.value 'socket.io', window.io
     app.value 'csrf', window.csrf

@@ -20,13 +20,46 @@
     </section>
     <section class="row">
         <div class="col-lg-12" infinite-scroll="topic.fetchMorePosts()" infinite-scroll-disabled="forum.fetchingPost">
-            <ul class="media-list">
-                <li class="media" ng-repeat="post in topic.posts">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" ng-src="//www.gravatar.com/avatar/{{post.user.gravatar}}?s=64&amp;d=mm" />
-                    </a>
-                    <div class="media-body">
-                        <p data-markdown="post.content"> </p>
+            <ul class="timeline">
+                <li>
+                    <div class="timeline-badge">
+                        <img class="media-object" ng-src="//www.gravatar.com/avatar/{{topic.user.gravatar}}?s=50&amp;d=mm" />
+                    </div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h4 class="timeline-title" ng-bind="topic.title"></h4>
+                        </div>
+                        <div class="timeline-body">
+                            <p data-markdown="topic.headPost.content"></p>
+                            <hr />
+                            <p>
+                                <small class="text-muted">
+                                    <span>Posted by </span>
+                                    <span ng-bind="topic.user.username"></span>
+                                    <i class="glyphicon glyphicon-time"></i> 
+                                    <span am-time-ago="topic.createdAt"></span>
+                                </small>
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                <li ng-repeat="post in topic.posts">
+                    <div class="timeline-badge">
+                        <img class="media-object" ng-src="//www.gravatar.com/avatar/{{post.user.gravatar}}?s=50&amp;d=mm" />
+                    </div>
+                    <div class="timeline-panel">
+                        <div class="timeline-body">
+                            <p data-markdown="post.content"></p>
+                            <hr />
+                            <p>
+                                <small class="text-muted">
+                                    <span>Posted by </span>
+                                    <span ng-bind="post.user.username"></span>
+                                    <i class="glyphicon glyphicon-time"></i> 
+                                    <span am-time-ago="post.createdAt"></span>
+                                </small>
+                            </p>
+                        </div>
                     </div>
                 </li>
             </ul>

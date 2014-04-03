@@ -117,6 +117,8 @@ module.exports =
                     findOptions = 
                         skip: skip
                         limit: limit
+                        where: 
+                            isHead: false
                         sort: 'updatedAt DESC'
 
                     TopicService.findOneToManyRelatedObject(topic, Post, findOptions)

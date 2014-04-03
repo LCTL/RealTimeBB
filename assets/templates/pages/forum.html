@@ -20,18 +20,30 @@
     </section>
     <section class="row">
         <div class="col-lg-12" infinite-scroll="forum.fetchMoreTopics()" infinite-scroll-disabled="forum.fetchingTopic">
-            <ul class="media-list">
-                <li class="media" ng-repeat="topic in forum.topics">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" ng-src="//www.gravatar.com/avatar/{{topic.user.gravatar}}?s=64&amp;d=mm" />
-                    </a>
-                    <div class="media-body">
-                        <a ng-href="/topic/{{topic.id}}">
-                            <h4 class="media-heading">
-                                <span ng-bind="topic.title"> </span>
-                            </h4>
-                        </a>
-                        <p ng-bind="topic.createdAt"> </p>
+            <ul class="timeline">
+                <li ng-repeat="topic in forum.topics">
+                    <div class="timeline-badge">
+                        <img class="media-object" ng-src="//www.gravatar.com/avatar/{{topic.user.gravatar}}?s=50&amp;d=mm" />
+                    </div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <a ng-href="/topic/{{topic.id}}">
+                                <h4 class="media-heading">
+                                    <span ng-bind="topic.title"> </span>
+                                </h4>
+                            </a>
+                        </div>
+                        <div class="timeline-body">
+                            <hr />
+                            <p>
+                                <small class="text-muted">
+                                    <span>Posted by </span>
+                                    <span ng-bind="topic.user.username"></span>
+                                    <i class="glyphicon glyphicon-time"></i> 
+                                    <span am-time-ago="topic.createdAt"></span>
+                                </small>
+                            </p>
+                        </div>
                     </div>
                 </li>
             </ul>

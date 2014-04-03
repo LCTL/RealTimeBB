@@ -50,6 +50,7 @@ module.exports = function (grunt) {
     styleBaseAssetsPath + 'angular-motion.css',
     styleBaseAssetsPath + 'ngProgress.css',
     styleBaseAssetsPath + 'sidebar.css',
+    styleBaseAssetsPath + 'timeline.css',
     styleBaseAssetsPath + 'commons.css'
   ];
 
@@ -71,7 +72,7 @@ module.exports = function (grunt) {
     jsVendorBaseAssetsPath + 'jquery.js',
     jsVendorBaseAssetsPath + 'bootstrap.js',
     jsVendorBaseAssetsPath + 'angular.js',
-    jsVendorBaseAssetsPath + 'angular.js',
+    jsVendorBaseAssetsPath + 'moment.js',
     jsVendorBaseAssetsPath + 'angular-route.js',
     jsVendorBaseAssetsPath + 'angular-route-segment.js',
     jsVendorBaseAssetsPath + 'angular-animate.js',
@@ -79,6 +80,7 @@ module.exports = function (grunt) {
     jsVendorBaseAssetsPath + 'angular-strap.tpl.js',
     jsVendorBaseAssetsPath + 'ng-infinite-scroll.js',
     jsVendorBaseAssetsPath + 'ngprogress.js',
+    jsVendorBaseAssetsPath + 'angular-moment.js',
 
     // Bring in the socket.io client
     jsVendorBaseAssetsPath + 'socket.io.js',
@@ -333,6 +335,16 @@ module.exports = function (grunt) {
           cwd: bowerBasePath + 'ngprogress',
           src: ['ngprogress.css'],
           dest: styleBaseAssetsPath
+        }, { //bower moment
+          expand: true,
+          cwd: bowerBasePath + 'momentjs',
+          src: ['moment.js'],
+          dest: jsVendorBaseAssetsPath
+        }, { //bower angular-moment
+          expand: true,
+          cwd: bowerBasePath + 'angular-moment',
+          src: ['angular-moment.js'],
+          dest: jsVendorBaseAssetsPath
         }]
       },
       build: {
