@@ -1,6 +1,7 @@
 Q = require 'q'
 ModelHelper = require './ModelHelper'
 Utils = require './Utils'
+NotificationService = require './NotificationService'
 
 module.exports = 
 
@@ -124,3 +125,15 @@ module.exports =
                 else
 
                     deferred.resolve modelObjects
+
+        publishCreate: (model, roomName) ->
+
+            NotificationService.publishCreate @modelClass, model, roomName
+
+        publishUpdate: (model, roomName) ->
+
+            NotificationService.publishUpdate @modelClass, model, roomName
+
+        publishDestroy: (model, roomName) ->
+
+            NotificationService.publishDestroy @modelClass, model, roomName

@@ -92,9 +92,7 @@ module.exports =
 
         .then (topic) ->
 
-            req.socket.broadcast.to('commons').emit 'Topic', 
-                action: 'create'
-                data: topic.toJSON()
+            TopicService.publishCreate topic
 
             res.json topic
 

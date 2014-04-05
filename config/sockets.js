@@ -16,7 +16,7 @@ module.exports.sockets = {
   // mixes in socket.io events for your routes and blueprints automatically.
   onConnect: function(session, socket) {
 
-    socket.join('commons');
+    NotificationService.onConnect (session, socket);
 
     // By default: do nothing
     // This is a good place to subscribe a new socket to a room, inform other users that
@@ -25,6 +25,8 @@ module.exports.sockets = {
 
   // This custom onDisconnect function will be run each time a socket disconnects
   onDisconnect: function(session, socket) {
+
+    NotificationService.onDisconnect (session, socket);
 
     // By default: do nothing
     // This is a good place to broadcast a disconnect message, or any other custom socket.io logic

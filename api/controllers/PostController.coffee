@@ -9,6 +9,7 @@ module.exports =
         user = req.session.user
 
         currentTopic = null
+        topicPromise = null
 
         TopicService.findOneById(topicId)
 
@@ -20,7 +21,7 @@ module.exports =
 
                     currentTopic = topic
 
-                    TopicService.findAllAndAssignManyToOneRelatedObject(currentTopic)
+                    topicPromise = TopicService.findAllAndAssignManyToOneRelatedObject(currentTopic)
 
                     Post.create
 
@@ -52,18 +53,15 @@ module.exports =
 
             currentTopic.updatedAt = new Date()
 
-            currentTopic.save (err) ->
+            topicPromise.then (topic) ->
 
-                if not err
+                topic.save (err) ->
 
-                    req.socket.broadcast.to('commons').emit 'Topic', 
-                        action: 'update'
-                        data: currentTopic.toJSON()
+                    if not err
 
+                        TopicService.publishUpdate topic
 
-            req.socket.broadcast.to('commons').emit 'Post', 
-                action: 'create'
-                data: post.toJSON()
+            PostService.publishCreate post
 
             res.json post
 
