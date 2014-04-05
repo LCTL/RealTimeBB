@@ -28,7 +28,7 @@ define ['app', 'ResourceFactory'], (app) ->
 
                         if message.action is 'create' and @id is message.data.forumId
 
-                            @topics.unshift message.data
+                            @topics.unshift @convertDataToRelatedModel 'Topic', message.data
                             $rootScope.$apply()
 
                         else if message.action is 'update' and @id is message.data.forumId
@@ -39,7 +39,7 @@ define ['app', 'ResourceFactory'], (app) ->
 
                                 if message.data.id is topic.id
 
-                                    angular.copy message.data, topic
+                                    topic.copyPropertyToInstance message.data
 
                                 callback null
 
