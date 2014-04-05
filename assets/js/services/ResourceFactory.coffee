@@ -1,15 +1,20 @@
 define ['app', 'classes/Module'], (app, Module) ->
 
-    app.register.factory 'ResourceFactory', ['CommunicationService', 'promiseTask', (communicationService, promiseTask) ->
+    app.register.factory 'ResourceFactory', ['$injector', 'CommunicationService', 'promiseTask', ($injector, communicationService, promiseTask) ->
 
         (basePath, options) ->
 
             options = {} if not options
+            options.relatedModels = {} if not options.relatedModels
             options.classProperties = {} if not options.classProperties
             options.instanceMethods = {} if not options.instanceMethods
             options.instanceVariables = {} if not options.instanceVariables
 
             defaultOptions = 
+
+                dateProperties: 
+                    createdAt: true,
+                    updatedAt: true
 
                 classProperties: 
 
@@ -111,6 +116,59 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                         params
 
+                    convertDataToRelatedModel: (relatedModelName, datas) ->
+
+                        if _.isArray datas
+
+                            values = []
+
+                            for data in datas
+
+                                values.push @constructor[relatedModelName].create data
+
+                            values
+
+                        else
+
+                            @constructor[relatedModelName].create datas if datas
+
+                    convertPropertiesToModels: (modelName, properties) ->
+
+                        if _.isArray properties
+
+                            for property in properties
+
+                                @[property] = @convertDataToRelatedModel modelName, @[property] if @[property]
+
+                        else 
+
+                            property = properties
+
+                            @[property] = @convertDataToRelatedModel modelName, @[property] if @[property]
+
+                    loadModelDependency: (modelName, asyncCallback) ->
+
+                        if @constructor[modelName]
+
+                            asyncCallback()
+
+                        else 
+
+                            requires = []
+                            requires.push modelName
+
+                            requirejs requires, () =>
+
+                                @constructor[modelName] = $injector.get(modelName)
+
+                                asyncCallback()
+
+                    loadModelDependencyAndConvertPropertiesToModels: (modelName, properties) ->
+
+                        @loadModelDependency modelName, () =>
+
+                            @convertPropertiesToModels modelName, properties
+
             for key, value of options
 
                 defaultOptions[key] = {} if not defaultOptions[key]
@@ -129,6 +187,12 @@ define ['app', 'classes/Module'], (app, Module) ->
                     if data
 
                         @copyPropertyToInstance data
+
+                        @[datePropertie] = moment(@[datePropertie]).toDate() for datePropertie of defaultOptions.dateProperties when @[datePropertie]
+
+                        for modelName, properties of defaultOptions.relatedModels
+
+                            @loadModelDependencyAndConvertPropertiesToModels modelName, properties
 
                     if defaultOptions.instanceMethods.init
 

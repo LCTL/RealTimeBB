@@ -46,6 +46,7 @@ module.exports =
                     findOptions = 
                         skip: skip 
                         limit: limit
+                        sort: 'updatedAt DESC'
 
                     ForumService.findOneToManyRelatedObject(forum, Topic, findOptions)
 

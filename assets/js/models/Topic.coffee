@@ -2,11 +2,17 @@ define ['app', 'ResourceFactory'], (app) ->
 
     app.register.factory 'Topic', ['$rootScope', 'ResourceFactory', 'CommunicationService', ($rootScope, resourceFactory, communicationService) ->
 
+        communicationService.listenEvent 'Topic'
         communicationService.listenEvent 'Post'
 
         basePath = '/topic'
 
         resourceFactory basePath, 
+
+            relatedModels: 
+                User: 'user'
+                Forum: 'forum'
+                Post: ['headPost', 'posts']
 
             instanceVariables:
                 posts: null
@@ -20,6 +26,12 @@ define ['app', 'ResourceFactory'], (app) ->
                 init: () ->
 
                     @posts = []
+
+                    $rootScope.$on 'Topic', (event, message) =>
+
+                        if message.action is 'update' and @id is message.data.id
+
+                            angular.copy message.data, @
 
                     $rootScope.$on 'Post', (event, message) =>
 
@@ -77,11 +89,13 @@ define ['app', 'ResourceFactory'], (app) ->
 
                             if posts and not _.isEmpty posts
 
-                                @posts = [] if not @posts
+                                @loadModelDependency 'Topic', () =>
 
-                                @posts.push post for post in posts
+                                    @posts.push @convertDataToRelatedModel 'Post', post for post in posts
 
-                                @fetchPostPage++
+                                    @allLoaded = true if posts.length < @fetchPostLimit
+
+                                    @fetchPostPage++
 
                             else if _.isEmpty posts
 

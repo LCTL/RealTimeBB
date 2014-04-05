@@ -21,7 +21,7 @@
     <section class="row">
         <div class="col-lg-12" infinite-scroll="forum.fetchMoreTopics()" infinite-scroll-disabled="forum.fetchingTopic">
             <ul class="timeline">
-                <li ng-repeat="topic in forum.topics">
+                <li ng-repeat="topic in (forum.topics | orderBy:'updatedAt':true) track by topic.id">
                     <div class="timeline-badge">
                         <img class="media-object" ng-src="//www.gravatar.com/avatar/{{topic.user.gravatar}}?s=50&amp;d=mm" />
                     </div>
