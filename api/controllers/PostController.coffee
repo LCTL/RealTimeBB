@@ -44,6 +44,10 @@ module.exports =
 
         .then (post) ->
 
+            req.socket.broadcast.to('commons').emit 'Post', 
+                action: 'create'
+                data: post.toJSON()
+
             res.json post
 
         .catch (err) ->

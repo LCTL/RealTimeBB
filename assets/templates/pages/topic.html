@@ -43,7 +43,7 @@
                         </div>
                     </div>
                 </li>
-                <li ng-repeat="post in topic.posts">
+                <li ng-repeat="post in topic.posts track by post.id" class="am-fade">
                     <div class="timeline-badge">
                         <img class="media-object" ng-src="//www.gravatar.com/avatar/{{post.user.gravatar}}?s=50&amp;d=mm" />
                     </div>

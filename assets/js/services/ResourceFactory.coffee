@@ -129,4 +129,8 @@ define ['app', 'classes/Module'], (app, Module) ->
                     if data
 
                         @copyPropertyToInstance data
+
+                    if defaultOptions.instanceMethods.init
+
+                        defaultOptions.instanceMethods.init.apply @
     ]

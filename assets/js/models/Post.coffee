@@ -1,6 +1,8 @@
 define ['app', 'ResourceFactory'], (app) ->
 
-    app.register.factory 'Post', ['ResourceFactory', (resourceFactory) ->
+    app.register.factory 'Post', ['CommunicationService', 'ResourceFactory', (communicationService, resourceFactory) ->
+
+        communicationService.listenEvent 'Post'
 
         basePath = '/post'
 

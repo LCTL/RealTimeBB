@@ -9,6 +9,7 @@ define [], () ->
             @connectSocket()
 
             @baseApiUrl = '/api'
+            @listenedEvents = {}
 
         connectSocket: ->
 
@@ -72,9 +73,13 @@ define [], () ->
 
         listenEvent: (eventName) ->
 
-            @socket.on eventName, (message) =>
+            if not @listenedEvents[eventName]
 
-                @$rootScope.$broadcast eventName, message
+                @listenedEvents[eventName] = true
+
+                @socket.on eventName, (message) =>
+
+                    @$rootScope.$broadcast eventName, message
 
         emit: (event, message) ->
 
