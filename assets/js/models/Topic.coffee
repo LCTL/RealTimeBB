@@ -31,13 +31,14 @@ define ['app', 'ResourceFactory'], (app) ->
 
                         if message.action is 'update' and @id is message.data.id
 
-                            angular.copy message.data, @
+                            @copyPropertyToInstance message.data
+                            $rootScope.$apply()
 
                     $rootScope.$on 'Post', (event, message) =>
 
                         if message.action is 'create' and @allLoaded and @id is message.data.topicId
 
-                            @posts.push message.data
+                            @posts.push @convertDataToRelatedModel 'Post', message.data
                             $rootScope.$apply()
 
                         else if message.action is 'update' and @id is message.data.topicId

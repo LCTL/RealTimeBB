@@ -106,6 +106,12 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                         @[key] = value for key, value of properties
 
+                        @[datePropertie] = moment(@[datePropertie]).toDate() for datePropertie of defaultOptions.dateProperties when @[datePropertie]
+
+                        for modelName, properties of defaultOptions.relatedModels
+
+                            @loadModelDependencyAndConvertPropertiesToModels modelName, properties
+
                     fetchInstanceParams: () ->
 
                         params = {}
@@ -187,12 +193,6 @@ define ['app', 'classes/Module'], (app, Module) ->
                     if data
 
                         @copyPropertyToInstance data
-
-                        @[datePropertie] = moment(@[datePropertie]).toDate() for datePropertie of defaultOptions.dateProperties when @[datePropertie]
-
-                        for modelName, properties of defaultOptions.relatedModels
-
-                            @loadModelDependencyAndConvertPropertiesToModels modelName, properties
 
                     if defaultOptions.instanceMethods.init
 
