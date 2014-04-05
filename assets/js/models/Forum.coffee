@@ -2,6 +2,7 @@ define ['app', 'ResourceFactory'], (app) ->
 
     app.register.factory 'Forum', ['$injector', '$rootScope', 'ResourceFactory', 'CommunicationService', ($injector, $rootScope, resourceFactory, communicationService) ->
 
+        communicationService.listenEvent 'Forum'
         communicationService.listenEvent 'Topic'
 
         basePath = '/forum'
@@ -23,6 +24,13 @@ define ['app', 'ResourceFactory'], (app) ->
                 init: () ->
 
                     @topics = []
+
+                    $rootScope.$on 'Forum', (event, message) =>
+
+                        if message.action is 'update' and @id is message.data.id
+
+                            @copyPropertyToInstance message.data
+                            $rootScope.$apply()
 
                     $rootScope.$on 'Topic', (event, message) =>
 

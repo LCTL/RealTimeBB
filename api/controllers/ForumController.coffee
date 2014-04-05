@@ -29,6 +29,13 @@ module.exports =
 
             res.json err 
 
+    create: (req, res) ->
+
+        Forum.create(req.params.all()).done (err, forum) ->
+
+            ForumService.publishCreate forum
+            res.json forum
+
     findForumTopics: (req, res) ->
 
         forumId = req.param 'id'
