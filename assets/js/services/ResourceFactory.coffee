@@ -98,7 +98,7 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                         @constructor.action(null, @fetchInstanceParams(), 'put')
 
-                    delete: () ->
+                    destroy: () ->
 
                         @constructor.action("/#{@.id}", @fetchInstanceParams(), 'delete')
 
@@ -118,7 +118,7 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                         for key, value of @
 
-                            params[key] = value if value and typeof value != 'function' 
+                            params[key] = value if value? and typeof value != 'function' 
 
                         params
 

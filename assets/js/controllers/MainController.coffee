@@ -21,5 +21,25 @@ define ['app', 'Forum'], (app) ->
 
                 page++
 
+        $scope.$on 'Forum', (event, message) ->
+
+            if message.action is 'create'
+
+                $scope.forums.push message.data
+                $scope.$digest()
+
+            else if message.action is 'destroy'
+
+                async.filter $scope.forums
+
+                , (forum, callback) ->
+
+                    if forum.id is message.data.id then callback false else callback true
+
+                , (results) ->
+
+                    $scope.forums = results
+                    $scope.$digest()
+
     ]
 

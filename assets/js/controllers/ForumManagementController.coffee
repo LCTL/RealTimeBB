@@ -63,11 +63,28 @@ define ['app', 'Forum'], (app) ->
 
                 , (item, callback) ->
 
-                    angular.copy(forum, item) if item.id == forum.id
+                    forum.copyPropertyToInstance item if item.id == forum.id
                     callback(null)
 
                 , () ->
 
+                    forumModal.hide() if forumModal
+
+        $scope.destroy = (forum) ->
+
+            forum.destroy()
+
+            .then (forum) ->
+
+                async.filter $scope.forums
+
+                , (item, callback) ->
+
+                    if item.id == forum.id then callback false else callback true
+
+                , (results) ->
+
+                    $scope.forums = results
                     forumModal.hide() if forumModal
 
     ]

@@ -1,5 +1,6 @@
 _  = require 'underscore'
 _.str = require 'underscore.string'
+Utils = require './Utils'
 
 class NotificationService 
 
@@ -25,13 +26,19 @@ class NotificationService
 
     publishDestroy: (modelClass, model, roomName) ->
 
-        @publish modelClass, model, 'destory', roomName
+        @publish modelClass, model, 'destroy', roomName
 
-    publish: (modelClass, model, action, roomName) ->
+    publish: (modelClass, models, action, roomName) ->
 
         roomName = @defaultRoomName if not roomName
 
-        sails.io.sockets.in(roomName).emit @createMessageName(modelClass), @createPublishMessage model, action
+        if Utils.isArray models
+
+            sails.io.sockets.in(roomName).emit @createMessageName(modelClass), @createPublishMessage model, action for model in models
+
+        else 
+
+            sails.io.sockets.in(roomName).emit @createMessageName(modelClass), @createPublishMessage models, action
 
     createMessageName: (modelClass) ->
 

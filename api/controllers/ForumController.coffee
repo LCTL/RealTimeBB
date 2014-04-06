@@ -36,6 +36,46 @@ module.exports =
             ForumService.publishCreate forum
             res.json forum
 
+    update: (req, res) ->
+
+        forumId = req.param 'id'
+
+        Forum.update id: forumId, req.params.all()
+
+        , (err, forum) ->
+
+            if err
+
+                res.json err 
+
+            else if forum
+
+                ForumService.publishUpdate forum
+
+                res.json forum 
+
+    destroy: (req, res) ->
+
+        forumId = req.param 'id'
+
+        ForumService.findOneById(forumId)
+
+        .then (forum) ->
+
+            if forum
+
+                forum.destroy (err) ->
+
+                    if err
+
+                        res.json err 
+
+                    else 
+
+                        ForumService.publishDestroy forum
+
+                        res.json forum 
+
     findForumTopics: (req, res) ->
 
         forumId = req.param 'id'
