@@ -12,6 +12,10 @@ define ['app', 'classes/Module'], (app, Module) ->
 
             defaultOptions = 
 
+                insertableAttributes: {}
+                updatableAttributes: 
+                    id: true
+
                 dateProperties: 
                     createdAt: true,
                     updatedAt: true
@@ -94,15 +98,15 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                     save: () ->
 
-                        @constructor.action(null, @fetchInstanceParams(), 'post')
+                        @constructor.action(null, @fetchInstanceParams(defaultOptions.insertableAttributes), 'post')
 
                     update: () ->
 
-                        @constructor.action(null, @fetchInstanceParams(), 'put')
+                        @constructor.action(null, @fetchInstanceParams(defaultOptions.updatableAttributes), 'put')
 
                     destroy: () ->
 
-                        @constructor.action("/#{@.id}", @fetchInstanceParams(), 'delete')
+                        @constructor.action("/#{@.id}", null, 'delete')
 
                     copyDataToInstance: (data) ->
 
@@ -114,13 +118,19 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                             @loadModelDependencyAndConvertPropertiesToModels modelName, properties
 
-                    fetchInstanceParams: () ->
+                    fetchInstanceParams: (attributes) ->
 
                         params = {}
 
                         for key, value of @
 
-                            params[key] = value if value? and typeof value != 'function' 
+                            if attributes 
+
+                                params[key] = value if attributes[key]
+
+                            else
+
+                                params[key] = value if value? and typeof value != 'function' 
 
                         params
 

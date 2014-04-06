@@ -4,6 +4,16 @@ define ['app', 'ResourceFactory'], (app) ->
 
         resourceFactory 'User', '/user',
 
+            insertableAttributes: 
+                email: true
+                username: true
+                password: true
+
+            updatableAttributes:
+                email: true
+                username: true
+                password: true
+
             instanceMethods: 
 
                 hasRole: (role) ->

@@ -6,6 +6,14 @@ define ['app', 'ResourceFactory'], (app) ->
 
         basePath = '/post'
 
-        resourceFactory 'Post', basePath
+        resourceFactory 'Post', basePath,
+
+            insertableAttributes: 
+                topicId: true
+                content: true
+
+            updatableAttributes:
+                topicId: true
+                content: true
         
     ]

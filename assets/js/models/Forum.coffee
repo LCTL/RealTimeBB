@@ -9,6 +9,14 @@ define ['app', 'ResourceFactory'], (app) ->
 
         resourceFactory 'Forum', basePath, 
 
+            insertableAttributes: 
+                name: true
+                desc: true
+
+            updatableAttributes:
+                name: true
+                desc: true
+
             relatedModels: 
                 Topic: ['topics']
 
