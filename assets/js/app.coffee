@@ -91,6 +91,7 @@ define ['angularAMD', 'classes/CommunicationService', 'classes/UserService', 'cl
     app.run ['$rootScope', '$location', 'ngProgress', 'UserService', 'RouteRestrictionService', ($rootScope, $location, ngProgress, userService, routeRestrictionService) ->
 
         $rootScope.navbarTemplateUrl = window.assets.template.concat('components/navbar.html')
+        $rootScope.footerTemplateUrl = window.assets.template.concat('components/footer.html')
         
         $rootScope.logout = () ->
 

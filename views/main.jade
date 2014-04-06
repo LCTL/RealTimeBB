@@ -20,11 +20,11 @@ html
 
     body
 
-        .slide-animate(ng-include='$root.navbarTemplateUrl')  
+        .header.slide-animate(ng-include='$root.navbarTemplateUrl')  
 
-        div.am-fade(app-view-segment='0')
+        .content.am-fade(app-view-segment='0')
 
-        .slide-animate(ng-include='$root.footerTemplateUrl')  
+        .footer.slide-animate(ng-include='$root.footerTemplateUrl')  
 
         script(type="text/javascript").
             (function () {
