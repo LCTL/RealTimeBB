@@ -118,6 +118,7 @@ module.exports =
             Q.all [
                 TopicService.findAllAndAssignManyToOneRelatedObject(topics),
                 TopicService.findAndAssignOneToManyRelatedObject(topics, Post, findOptions)
+                TopicService.findAndAssignLastPost(topics)
             ]
 
         .then (arrayOfTopics) ->

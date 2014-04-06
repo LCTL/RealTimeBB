@@ -1,3 +1,4 @@
+_ = require 'underscore'
 BaseModelService = require './BaseModelService'
 Utils = require './Utils'
 async = require 'async'
@@ -9,6 +10,53 @@ class TopicService extends BaseModelService
         super Topic, 
             manyToOneModelClasses: [User, Forum]
             oneToManyModelClasses: [Post]
+
+    findAndAssignLastPost: (topics, asyncCallback) ->
+
+        Utils.promiseTask asyncCallback, (deferred) =>
+
+            findOptions = 
+                skip: 0
+                limit: 1
+                sort: 'createdAt DESC'
+                where: 
+                    isHead: false
+
+            fieldName = 'lastPost'
+
+            _topics = []
+
+            if  Utils.isArray topics
+
+                _topics = topics
+
+            else 
+
+                _topics.push topics
+
+            async.reduce _topics, []
+
+            , (memo, topic, callback) =>
+
+                @ModelHelper.findAndAssignOneToManyRelatedObject(topic, Post, @modelRelatedObjectIdentity, fieldName, findOptions)
+
+                .then (topic) ->
+
+                    topic[fieldName] = _.first topic[fieldName]
+
+                    memo.push topic[fieldName] if topic[fieldName]
+
+                    callback null, memo
+
+            , (err, posts) ->
+
+                PostService = require './PostService'
+
+                PostService.findAndAssignManyToOneRelatedObject(posts, User)
+
+                .then (posts) ->
+
+                    deferred.resolve topics
 
     findAndAssignHeadPost: (topics, asyncCallback) ->
 

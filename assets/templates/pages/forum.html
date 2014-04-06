@@ -42,6 +42,15 @@
                                     <i class="glyphicon glyphicon-time"></i> 
                                     <span am-time-ago="topic.createdAt"></span>
                                 </small>
+
+                                <span class="text-muted" ng-show="topic.lastPost"> | </span>
+
+                                <small class="text-muted" ng-show="topic.lastPost">
+                                    <span>Last replied by </span>
+                                    <span ng-bind="topic.lastPost.user.username"></span>
+                                    <i class="glyphicon glyphicon-time"></i> 
+                                    <span am-time-ago="topic.lastPost.createdAt"></span>
+                                </small>
                             </p>
                         </div>
                     </div>

@@ -21,7 +21,7 @@ define ['app', 'ResourceFactory'], (app) ->
             relatedModels: 
                 User: 'user'
                 Forum: 'forum'
-                Post: ['headPost', 'posts']
+                Post: ['headPost', 'lastPost', 'posts']
 
             instanceVariables:
                 posts: null

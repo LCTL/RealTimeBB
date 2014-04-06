@@ -51,6 +51,7 @@ module.exports =
 
         .then (post) ->
 
+            currentTopic.lastPost = post
             currentTopic.updatedAt = new Date()
 
             topicPromise.then (topic) ->
