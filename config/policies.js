@@ -26,8 +26,6 @@ module.exports.policies = {
     update: 'isAdmin',
     destroy: 'isAdmin',
 
-  	current: 'isAuthenticated',
-
   	register: true,
   	isEmailAvailable: true,
   	isUsernameAvailable: true
@@ -39,21 +37,29 @@ module.exports.policies = {
     find: true,
     create: 'isAdmin',
     update: 'isAdmin',
-    destroy: 'isAdmin'
+    destroy: 'isAdmin',
+
+    findForumTopics: true
 
   }, 
 
   TopicController: {
 
     find: true,
-    create: 'isAuthenticated'
+    create: 'isAuthenticated',
+    update: 'isAdmin',
+    destroy: 'isAdmin',
+
+    findTopicPosts: true
 
   },
 
   PostController: {
 
     find: true,
-    create: 'isAuthenticated'
+    create: 'isAuthenticated',
+    update: 'isAdmin',
+    destroy: 'isAdmin'
 
   }
 
