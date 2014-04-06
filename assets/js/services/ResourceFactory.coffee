@@ -18,6 +18,8 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                 classProperties: 
 
+                    identity: modelName
+
                     action: (additionalPath, params, method) ->
                         promiseTask (deferred) ->
 
@@ -177,10 +179,51 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                     handleUpdateEvent: (event, message) ->
 
-                        if event.name is modelName and message.action is 'update' and message.data.id is @$id
+                        if event.name is @constructor.identity and message.action is 'update' and message.data.id is @id
 
                             @copyPropertyToInstance message.data
                             $rootScope.$apply()
+
+                    handleRelatedModelEvent: (event, message) ->
+
+                        properties = defaultOptions.relatedModels[event.name]
+
+                        if not _.isArray properties
+
+                            temp = properties
+                            properties = []
+                            properties.push temp
+
+                        async.each properties
+
+                        , (property, callback) =>
+
+                            if message.action is 'destroy'
+
+                                @destroyModelPropertyData property, message.data
+
+                        , (err) ->
+
+                            $rootScope.$apply()
+
+                    destroyModelPropertyData: (property, data) ->
+
+                        if @[property] and _.isArray @[property]
+
+                            async.filter @[property]
+
+                            , (model, callback) ->
+
+                                if model.id is data then callback false else callback true
+
+                            , (results) ->
+
+                                @[property] = results
+                                $rootScope.$apply()
+
+                        else if @[property]
+
+                            @[property] = null if @[property].id is data
 
             for key, value of options
 
@@ -197,7 +240,15 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                     @[key] = value for key, value of defaultOptions.instanceVariables
 
-                    $rootScope.$on modelName, @handleUpdateEvent
+                    $rootScope.$on @constructor.identity, (event, message) =>
+
+                        @handleUpdateEvent event, message
+
+                    for modelName, properties of defaultOptions.relatedModels
+
+                        $rootScope.$on modelName, (event, message) =>
+
+                            @handleRelatedModelEvent event, message
 
                     if data
 
