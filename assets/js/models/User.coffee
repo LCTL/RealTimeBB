@@ -2,7 +2,7 @@ define ['app', 'ResourceFactory'], (app) ->
 
     app.register.factory 'User', ['CommunicationService', 'promiseTask', 'ResourceFactory', (communicationService, promiseTask, resourceFactory) ->
 
-        resourceFactory '/user',
+        resourceFactory 'User', '/user',
 
             instanceMethods: 
 

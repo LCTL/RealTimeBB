@@ -6,6 +6,6 @@ define ['app', 'ResourceFactory'], (app) ->
 
         basePath = '/post'
 
-        resourceFactory basePath
+        resourceFactory 'Post', basePath
         
     ]

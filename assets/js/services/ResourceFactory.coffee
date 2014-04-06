@@ -1,8 +1,8 @@
 define ['app', 'classes/Module'], (app, Module) ->
 
-    app.register.factory 'ResourceFactory', ['$injector', 'CommunicationService', 'promiseTask', ($injector, communicationService, promiseTask) ->
+    app.register.factory 'ResourceFactory', ['$rootScope', '$injector', 'CommunicationService', 'promiseTask', ($rootScope, $injector, communicationService, promiseTask) ->
 
-        (basePath, options) ->
+        (modelName, basePath, options) ->
 
             options = {} if not options
             options.relatedModels = {} if not options.relatedModels
@@ -175,6 +175,13 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                             @convertPropertiesToModels modelName, properties
 
+                    handleUpdateEvent: (event, message) ->
+
+                        if event.name is modelName and message.action is 'update' and message.data.id is @$id
+
+                            @copyPropertyToInstance message.data
+                            $rootScope.$apply()
+
             for key, value of options
 
                 defaultOptions[key] = {} if not defaultOptions[key]
@@ -189,6 +196,8 @@ define ['app', 'classes/Module'], (app, Module) ->
                 constructor: (data) ->
 
                     @[key] = value for key, value of defaultOptions.instanceVariables
+
+                    $rootScope.$on modelName, @handleUpdateEvent
 
                     if data
 

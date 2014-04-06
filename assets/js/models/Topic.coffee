@@ -7,7 +7,7 @@ define ['app', 'ResourceFactory'], (app) ->
 
         basePath = '/topic'
 
-        resourceFactory basePath, 
+        resourceFactory 'Topic', basePath, 
 
             relatedModels: 
                 User: 'user'
@@ -26,14 +26,7 @@ define ['app', 'ResourceFactory'], (app) ->
                 init: () ->
 
                     @posts = []
-
-                    $rootScope.$on 'Topic', (event, message) =>
-
-                        if message.action is 'update' and @id is message.data.id
-
-                            @copyPropertyToInstance message.data
-                            $rootScope.$apply()
-
+                    
                     $rootScope.$on 'Post', (event, message) =>
 
                         if message.action is 'create' and @allLoaded and @id is message.data.topicId

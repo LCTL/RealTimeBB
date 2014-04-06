@@ -7,7 +7,7 @@ define ['app', 'ResourceFactory'], (app) ->
 
         basePath = '/forum'
 
-        resourceFactory basePath, 
+        resourceFactory 'Forum', basePath, 
 
             relatedModels: 
                 Topic: ['topics']
