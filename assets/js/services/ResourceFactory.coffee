@@ -124,7 +124,7 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                         params
 
-                    convertDataToRelatedModel: (relatedModelName, datas) ->
+                    convertDataToRelatedModel: (modelClass, datas) ->
 
                         if _.isArray datas
 
@@ -132,33 +132,33 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                             for data in datas
 
-                                values.push @constructor[relatedModelName].create data
+                                values.push modelClass.create data
 
                             values
 
                         else
 
-                            @constructor[relatedModelName].create datas if datas
+                            modelClass.create datas if datas
 
-                    convertPropertiesToModels: (modelName, properties) ->
+                    convertPropertiesToModels: (modelClass, properties) ->
 
                         if _.isArray properties
 
                             for property in properties
 
-                                @[property] = @convertDataToRelatedModel modelName, @[property] if @[property]
+                                @[property] = @convertDataToRelatedModel modelClass, @[property] if @[property]
 
                         else 
 
                             property = properties
 
-                            @[property] = @convertDataToRelatedModel modelName, @[property] if @[property]
+                            @[property] = @convertDataToRelatedModel modelClass, @[property] if @[property]
 
                     loadModelDependency: (modelName, asyncCallback) ->
 
                         if @constructor[modelName]
 
-                            asyncCallback()
+                            asyncCallback(@constructor[modelName])
 
                         else 
 
@@ -169,13 +169,13 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                                 @constructor[modelName] = $injector.get(modelName)
 
-                                asyncCallback()
+                                asyncCallback(@constructor[modelName])
 
                     loadModelDependencyAndConvertPropertiesToModels: (modelName, properties) ->
 
-                        @loadModelDependency modelName, () =>
+                        @loadModelDependency modelName, (modelClass) =>
 
-                            @convertPropertiesToModels modelName, properties
+                            @convertPropertiesToModels modelClass, properties
 
                     handleUpdateEvent: (event, message) ->
 

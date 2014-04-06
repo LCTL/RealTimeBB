@@ -29,8 +29,10 @@ define ['app', 'ResourceFactory'], (app) ->
 
                         if message.action is 'create' and @id is message.data.forumId
 
-                            @topics.unshift @convertDataToRelatedModel 'Topic', message.data
-                            $rootScope.$apply()
+                            @loadModelDependency 'Topic', (Topic) =>
+
+                                @topics.unshift @convertDataToRelatedModel Topic, message.data
+                                $rootScope.$apply()
 
                 fetchMoreTopics: () ->
 
@@ -46,9 +48,9 @@ define ['app', 'ResourceFactory'], (app) ->
 
                             if topics and not _.isEmpty topics
 
-                                @loadModelDependency 'Topic', () =>
+                                @loadModelDependency 'Topic', (Topic) =>
 
-                                    @topics.push @convertDataToRelatedModel 'Topic', topic for topic in topics
+                                    @topics.push @convertDataToRelatedModel Topic, topic for topic in topics
 
                                     @allTopicLoaded = true if topics.length < @fetchTopicLimit
 

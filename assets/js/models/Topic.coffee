@@ -31,8 +31,10 @@ define ['app', 'ResourceFactory'], (app) ->
 
                         if message.action is 'create' and @allLoaded and @id is message.data.topicId
 
-                            @posts.push @convertDataToRelatedModel 'Post', message.data
-                            $rootScope.$apply()
+                            @loadModelDependency 'Post', (Post) =>
+
+                                @posts.push @convertDataToRelatedModel Post, message.data
+                                $rootScope.$apply()
 
                 fetchMorePosts: () ->
 
@@ -48,9 +50,9 @@ define ['app', 'ResourceFactory'], (app) ->
 
                             if posts and not _.isEmpty posts
 
-                                @loadModelDependency 'Topic', () =>
+                                @loadModelDependency 'Post', (Post) =>
 
-                                    @posts.push @convertDataToRelatedModel 'Post', post for post in posts
+                                    @posts.push @convertDataToRelatedModel Post, post for post in posts
 
                                     @allLoaded = true if posts.length < @fetchPostLimit
 
