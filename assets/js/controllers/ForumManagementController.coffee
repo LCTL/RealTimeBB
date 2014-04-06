@@ -63,7 +63,7 @@ define ['app', 'Forum'], (app) ->
 
                 , (item, callback) ->
 
-                    forum.copyPropertyToInstance item if item.id == forum.id
+                    forum.copyDataToInstance item if item.id == forum.id
                     callback(null)
 
                 , () ->

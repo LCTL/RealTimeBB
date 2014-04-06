@@ -104,9 +104,9 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                         @constructor.action("/#{@.id}", @fetchInstanceParams(), 'delete')
 
-                    copyPropertyToInstance: (properties) ->
+                    copyDataToInstance: (data) ->
 
-                        @[key] = value for key, value of properties
+                        @[key] = value for key, value of data
 
                         @[datePropertie] = moment(@[datePropertie]).toDate() for datePropertie of defaultOptions.dateProperties when @[datePropertie]
 
@@ -181,7 +181,7 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                         if event.name is @constructor.identity and message.action is 'update' and message.data.id is @id
 
-                            @copyPropertyToInstance message.data
+                            @copyDataToInstance message.data
                             $rootScope.$apply()
 
                     handleRelatedModelEvent: (event, message) ->
@@ -252,7 +252,7 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                     if data
 
-                        @copyPropertyToInstance data
+                        @copyDataToInstance data
 
                     if defaultOptions.instanceMethods.init
 
