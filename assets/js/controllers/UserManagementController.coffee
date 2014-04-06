@@ -76,7 +76,7 @@ define ['app', 'User'], (app) ->
 
         $scope.delete = (user) ->
 
-            user.delete().then (user) ->
+            user.destroy().then (user) ->
 
                 async.filter $scope.users
 
