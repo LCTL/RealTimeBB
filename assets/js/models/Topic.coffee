@@ -36,7 +36,7 @@ define ['app', 'ResourceFactory'], (app) ->
 
                     @posts = []
                     
-                    $rootScope.$on 'Post', (event, message) =>
+                    @listenerCallbacks.push $rootScope.$on 'Post', (event, message) =>
 
                         if message.action is 'create' and @allLoaded and @id is message.data.topicId
 

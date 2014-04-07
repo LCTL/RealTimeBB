@@ -33,7 +33,7 @@ define ['app', 'ResourceFactory'], (app) ->
 
                     @topics = []
 
-                    $rootScope.$on 'Topic', (event, message) =>
+                    @listenerCallbacks.push $rootScope.$on 'Topic', (event, message) =>
 
                         if message.action is 'create' and @id is message.data.forumId
 

@@ -94,6 +94,10 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                         skip
 
+                instanceVariables:
+
+                    isModel: true
+
                 instanceMethods:
 
                     save: () ->
@@ -110,7 +114,13 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                     copyDataToInstance: (data) ->
 
-                        @[key] = value for key, value of data
+                        for key, value of data
+
+                            if @[key] and @[key].isModel
+
+                                @[key].__removeListeners()
+
+                            @[key] = value 
 
                         @[datePropertie] = moment(@[datePropertie]).toDate() for datePropertie of defaultOptions.dateProperties when @[datePropertie]
 
@@ -142,7 +152,13 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                             for data in datas
 
-                                values.push modelClass.create data
+                                if not data.isModel
+
+                                    values.push modelClass.create data
+
+                                else
+
+                                    values.push data
 
                             values
 
@@ -156,13 +172,13 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                             for property in properties
 
-                                @[property] = @convertDataToRelatedModel modelClass, @[property] if @[property]
+                                @[property] = @convertDataToRelatedModel modelClass, @[property] if @[property] and not @[property].isModel
 
                         else 
 
                             property = properties
 
-                            @[property] = @convertDataToRelatedModel modelClass, @[property] if @[property]
+                            @[property] = @convertDataToRelatedModel modelClass, @[property] if @[property] and not @[property].isModel
 
                     loadModelDependency: (modelName, asyncCallback) ->
 
@@ -235,6 +251,10 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                             @[property] = null if @[property].id is data
 
+                    __removeListeners: () ->
+
+                        callback() for callback in @listenerCallbacks
+
             for key, value of options
 
                 defaultOptions[key] = {} if not defaultOptions[key]
@@ -250,13 +270,15 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                     @[key] = value for key, value of defaultOptions.instanceVariables
 
-                    $rootScope.$on @constructor.identity, (event, message) =>
+                    @listenerCallbacks = []
+
+                    @listenerCallbacks.push $rootScope.$on @constructor.identity, (event, message) =>
 
                         @handleUpdateEvent event, message
 
                     for modelName, properties of defaultOptions.relatedModels
 
-                        $rootScope.$on modelName, (event, message) =>
+                        @listenerCallbacks.push $rootScope.$on modelName, (event, message) =>
 
                             @handleRelatedModelEvent event, message
 
