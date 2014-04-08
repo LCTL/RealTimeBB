@@ -23,4 +23,10 @@ define ['app', 'Markdown', 'Topic', 'Post'], (app) ->
                 $scope.replyPost = Post.create
                     topicId: $scope.topic.id
 
+        $scope.$on '$destroy', () ->
+
+            $scope.topic.__removeListeners()
+
+            $scope.topic = null
+
     ]

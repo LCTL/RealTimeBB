@@ -70,4 +70,10 @@ define ['app', 'Forum', 'Topic'], (app) ->
                         newTopicModal.hide()
 
                         $location.path "/topic/#{topic.id}"
+
+                $scope.$on '$destroy', () ->
+
+                    $scope.forum.__removeListeners()
+
+                    $scope.forum = null
     ]
