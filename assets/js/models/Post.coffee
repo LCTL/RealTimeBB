@@ -15,5 +15,9 @@ define ['app', 'ResourceFactory'], (app) ->
             updatableAttributes:
                 topicId: true
                 content: true
+
+            relatedModels: 
+                User: 'user'
+                Topic: 'topic'
         
     ]

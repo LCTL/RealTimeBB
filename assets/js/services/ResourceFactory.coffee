@@ -210,6 +210,10 @@ define ['app', 'classes/Module'], (app, Module) ->
                             @copyDataToInstance message.data
                             $rootScope.$apply()
 
+                        else if event.name is @constructor.identity and message.action is 'destroy'
+
+                            @__removeListeners()
+
                     handleRelatedModelEvent: (event, message) ->
 
                         properties = defaultOptions.relatedModels[event.name]
@@ -240,7 +244,15 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                             , (model, callback) ->
 
-                                if model.id is data then callback false else callback true
+                                if model.id is data.id 
+
+                                    model.__removeListeners()
+
+                                    callback false
+
+                                else 
+
+                                    callback true
 
                             , (results) ->
 
@@ -253,7 +265,33 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                     __removeListeners: () ->
 
+                        console.dir @
+
                         callback() for callback in @listenerCallbacks
+
+                        for modelName, properties of defaultOptions.relatedModels
+
+                            if _.isArray properties
+
+                                async.each properties
+
+                                , (property, callback) =>
+
+                                    if @[property] and _.isArray @[property]
+
+                                        item.__removeListeners() for item in @[property] when item.isModel
+
+                                    else if @[property] and @[property].isModel
+
+                                        @[property].__removeListeners()
+
+                                    callback null
+
+                                , (err) ->
+
+                            else if @[properties] and @[properties].isModel
+
+                                @[properties].__removeListeners()
 
             for key, value of options
 
@@ -273,6 +311,8 @@ define ['app', 'classes/Module'], (app, Module) ->
                     @listenerCallbacks = []
 
                     @listenerCallbacks.push $rootScope.$on @constructor.identity, (event, message) =>
+
+                        console.log @constructor.identity
 
                         @handleUpdateEvent event, message
 
