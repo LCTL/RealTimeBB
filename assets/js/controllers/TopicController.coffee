@@ -20,12 +20,12 @@ define ['app', 'Markdown', 'Topic', 'Post'], (app) ->
 
             post.save().then (post) ->
 
-                $scope.replyPost = Post.create
-                    topicId: $scope.topic.id
+                $scope.replyPost.content = ''
 
         $scope.$on '$destroy', () ->
 
-            $scope.topic.releaseReference()
+            $scope.topic?.releaseReference()
+            $scope.replyPost?.releaseReference()
 
             $scope.topic = null
 

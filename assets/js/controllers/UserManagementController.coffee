@@ -67,7 +67,12 @@ define ['app', 'User'], (app) ->
 
                 , (item, callback) ->
 
-                    angular.copy(user, item) if item.id == user.id
+                    if item.id == user.id
+
+                        console.dir item
+
+                        user.copyDataToInstance item
+
                     callback(null)
 
                 , () ->
@@ -82,7 +87,15 @@ define ['app', 'User'], (app) ->
 
                 , (item, callback) ->
 
-                    callback !(item.id == user.id)
+                    if item.id is user.id
+
+                        user.releaseReference()
+
+                        callback false
+
+                    else
+
+                        callback true
 
                 , (results) ->
 
@@ -114,6 +127,14 @@ define ['app', 'User'], (app) ->
                 else
 
                     $scope.user.isEmailAvailable()
+
+        $scope.$on '$destroy', () ->
+
+            user.releaseReference() for user in $scope.users
+
+            $scope.user.releaseReference() if $scope.user
+
+            $scope.users = null
 
     ]
 

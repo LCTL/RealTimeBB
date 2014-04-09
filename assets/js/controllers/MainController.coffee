@@ -25,7 +25,7 @@ define ['app', 'Forum'], (app) ->
 
             if message.action is 'create'
 
-                $scope.forums.push message.data
+                $scope.forums.push Forum.create message.data
                 $scope.$digest()
 
             else if message.action is 'destroy'
@@ -40,6 +40,12 @@ define ['app', 'Forum'], (app) ->
 
                     $scope.forums = results
                     $scope.$digest()
+
+        $scope.$on '$destroy', () ->
+
+            forum.releaseReference() for forum in $scope.forums
+
+            $scope.forums = null
 
     ]
 

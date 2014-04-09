@@ -48,22 +48,22 @@ define ['app', 'Forum'], (app) ->
         $scope.create = (forum) ->
 
             forum.save()
-            .then (forum) ->
+            .then (forumData) ->
 
-                $scope.forums.push forum
+                $scope.forums.push Forum.create forum
 
                 forumModal.hide() if forumModal
 
         $scope.update = (forum) ->
 
             forum.update()
-            .then (forum) ->
+            .then (forumData) ->
 
                 async.each $scope.forums
 
-                , (item, callback) ->
+                , (forum, callback) ->
 
-                    forum.copyDataToInstance item if item.id == forum.id
+                    forum.copyDataToInstance forumData if forum.id == forumData.id
                     callback(null)
 
                 , () ->
@@ -74,17 +74,31 @@ define ['app', 'Forum'], (app) ->
 
             forum.destroy()
 
-            .then (forum) ->
+            .then (forumData) ->
 
                 async.filter $scope.forums
 
-                , (item, callback) ->
+                , (forum, callback) ->
 
-                    if item.id == forum.id then callback false else callback true
+                    if forum.id == forumData.id 
+
+                        forum.releaseReference()
+
+                        callback false 
+
+                    else 
+
+                        callback true
 
                 , (results) ->
 
                     $scope.forums = results
                     forumModal.hide() if forumModal
+
+        $scope.$on '$destroy', () ->
+
+            forum.releaseReference() for forum in $scope.forums
+
+            $scope.forums = null
 
     ]

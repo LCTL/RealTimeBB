@@ -25,6 +25,7 @@ define ['app', 'classes/Module'], (app, Module) ->
                     identity: modelName
 
                     action: (additionalPath, params, method) ->
+
                         promiseTask (deferred) ->
 
                             if additionalPath
@@ -39,21 +40,7 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                             .then (results) ->
 
-                                if results and angular.isArray results
-
-                                    async.map results 
-
-                                    , (item, callback) ->
-
-                                        callback null, Resource.create item
-
-                                    , (err, results) ->
-
-                                        deferred.resolve results
-
-                                else if results
-
-                                    deferred.resolve Resource.create results
+                                deferred.resolve results
 
                             , (error) ->
 
@@ -65,14 +52,38 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                     findAll: (skip, limit) ->
 
-                        skip ?= 0
-                        limit ?= 20
+                        promiseTask (deferred) ->
 
-                        params = 
-                            skip: skip
-                            limit: limit
+                            skip ?= 0
+                            limit ?= 20
 
-                        Resource.action(null, params, 'get')
+                            params = 
+                                skip: skip
+                                limit: limit
+
+                            Resource.action(null, params, 'get')
+
+                            .then (datas) ->
+
+                                if datas and angular.isArray datas
+
+                                    async.map datas 
+
+                                    , (data, callback) ->
+
+                                        callback null, Resource.create data
+
+                                    , (err, results) ->
+
+                                        deferred.resolve results
+
+                                else if datas
+
+                                    deferred.resolve Resource.create datas
+
+                            , (err) ->
+
+                                deferred.reject err
 
                     findAllByPaginate: (page, limit) ->
 
@@ -80,7 +91,17 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                     findById: (id) ->
 
-                        Resource.action("/#{id}", null, 'get')
+                        promiseTask (deferred) ->
+
+                            Resource.action("/#{id}", null, 'get')
+
+                            .then (data) ->
+
+                                deferred.resolve Resource.create data
+
+                            , (err) ->
+
+                                deferred.reject err
 
                     calculateSkipByPage: (page, limit = 20) ->
 
@@ -246,7 +267,7 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                                 if model.id is data.id 
 
-                                    model.releaseReference()
+                                    model.releaseReference() if model.isModel
 
                                     callback false
 
@@ -327,8 +348,6 @@ define ['app', 'classes/Module'], (app, Module) ->
                     @listenerCallbacks = []
 
                     @listenerCallbacks.push $rootScope.$on @constructor.identity, (event, message) =>
-
-                        console.log @constructor.identity
 
                         @handleUpdateEvent event, message
 
