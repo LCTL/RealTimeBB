@@ -7,6 +7,7 @@ define ['app', 'User'], (app) ->
 
         userModal = null
         page = 1
+        listenerCallbacks = []
 
         $scope.showUserModal = (user, mode) ->
 
@@ -104,7 +105,7 @@ define ['app', 'User'], (app) ->
                      userModal.hide() if userModal
 
 
-        $scope.$watch 'user.username', (newValue, oldValue) ->
+        listenerCallbacks.push $scope.$watch 'user.username', (newValue, oldValue) ->
 
             if $scope.user
 
@@ -116,7 +117,7 @@ define ['app', 'User'], (app) ->
 
                     $scope.user.isUsernameAvailable()
 
-        $scope.$watch 'user.email', (newValue, oldValue) ->
+        listenerCallbacks.push $scope.$watch 'user.email', (newValue, oldValue) ->
 
             if $scope.user
 
@@ -128,13 +129,15 @@ define ['app', 'User'], (app) ->
 
                     $scope.user.isEmailAvailable()
 
-        $scope.$on '$destroy', () ->
+        listenerCallbacks.push $scope.$on '$destroy', () ->
 
             user.releaseReference() for user in $scope.users
 
             $scope.user.releaseReference() if $scope.user
 
             $scope.users = null
+
+            listenerCallback() for listenerCallback in listenerCallbacks
 
     ]
 

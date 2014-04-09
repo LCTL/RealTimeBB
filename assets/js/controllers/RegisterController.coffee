@@ -8,15 +8,17 @@ define ['app', 'UserService', 'User'], (app) ->
         $rootScope.pageTitle = 'Register'
         $scope.user = User.create()
 
-        $scope.$watch 'user.username', (newValue, oldValue) ->
+        listenerCallbacks = []
+
+        listenerCallbacks.push $scope.$watch 'user.username', (newValue, oldValue) ->
             
             $scope.user.isUsernameAvailable()
 
-        $scope.$watch 'user.email', (newValue, oldValue) ->
+        listenerCallbacks.push $scope.$watch 'user.email', (newValue, oldValue) ->
 
             $scope.user.isEmailAvailable()
 
-        $scope.$watch 'user.passwordConfirmation', (newValue, oldValue) ->
+        listenerCallbacks.push $scope.$watch 'user.passwordConfirmation', (newValue, oldValue) ->
 
             if newValue != $scope.user.password
 
@@ -33,5 +35,11 @@ define ['app', 'UserService', 'User'], (app) ->
                 userService.register(user).then (user) ->
 
                     $location.path '/'
+
+        $scope.$on '$destroy', () ->
+
+            $scope.user?.releaseReference()
+
+            listenerCallback() for listenerCallback in listenerCallbacks
 
     ]

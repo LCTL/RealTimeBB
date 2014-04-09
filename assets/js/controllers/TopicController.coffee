@@ -27,6 +27,4 @@ define ['app', 'Markdown', 'Topic', 'Post'], (app) ->
             $scope.topic?.releaseReference()
             $scope.replyPost?.releaseReference()
 
-            $scope.topic = null
-
     ]

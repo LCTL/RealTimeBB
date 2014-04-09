@@ -7,6 +7,7 @@ define ['app', 'Forum'], (app) ->
 
         forumModal = null
         page = 1
+        listenerCallbacks = []
 
         $scope.showForumModal = (forum, mode) ->
 
@@ -95,10 +96,12 @@ define ['app', 'Forum'], (app) ->
                     $scope.forums = results
                     forumModal.hide() if forumModal
 
-        $scope.$on '$destroy', () ->
+        listenerCallbacks.push $scope.$on '$destroy', () ->
 
             forum.releaseReference() for forum in $scope.forums
 
             $scope.forums = null
+
+            listenerCallback() for listenerCallback in listenerCallbacks
 
     ]

@@ -8,6 +8,7 @@ define ['app', 'Forum'], (app) ->
         $scope.busy = false
 
         page = 1
+        listenerCallbacks = []
 
         $scope.nextPage = () ->
 
@@ -21,7 +22,7 @@ define ['app', 'Forum'], (app) ->
 
                 page++
 
-        $scope.$on 'Forum', (event, message) ->
+        listenerCallbacks.push $scope.$on 'Forum', (event, message) ->
 
             if message.action is 'create'
 
@@ -34,18 +35,29 @@ define ['app', 'Forum'], (app) ->
 
                 , (forum, callback) ->
 
-                    if forum.id is message.data.id then callback false else callback true
+                    if forum.id is message.data.id 
+
+                        forum.releaseReference()
+
+                        callback false
+
+                    else
+
+                        callback true
 
                 , (results) ->
 
                     $scope.forums = results
                     $scope.$digest()
 
-        $scope.$on '$destroy', () ->
+        listenerCallbacks.push $scope.$on '$destroy', () ->
 
             forum.releaseReference() for forum in $scope.forums
 
             $scope.forums = null
+            $scope.nextPage = null
+
+            listenerCallback() for listenerCallback in listenerCallbacks
 
     ]
 
