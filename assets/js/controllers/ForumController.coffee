@@ -73,7 +73,7 @@ define ['app', 'Forum', 'Topic'], (app) ->
 
                 $scope.$on '$destroy', () ->
 
-                    $scope.forum.__removeListeners()
+                    $scope.forum.releaseReference()
 
                     $scope.forum = null
     ]

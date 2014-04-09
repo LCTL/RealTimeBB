@@ -25,7 +25,7 @@ define ['app', 'Markdown', 'Topic', 'Post'], (app) ->
 
         $scope.$on '$destroy', () ->
 
-            $scope.topic.__removeListeners()
+            $scope.topic.releaseReference()
 
             $scope.topic = null
 

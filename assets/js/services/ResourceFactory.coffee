@@ -118,7 +118,7 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                             if @[key] and @[key].isModel
 
-                                @[key].__removeListeners()
+                                @[key].releaseReference()
 
                             @[key] = value 
 
@@ -212,7 +212,7 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                         else if event.name is @constructor.identity and message.action is 'destroy'
 
-                            @__removeListeners()
+                            @releaseReference()
 
                     handleRelatedModelEvent: (event, message) ->
 
@@ -246,7 +246,7 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                                 if model.id is data.id 
 
-                                    model.__removeListeners()
+                                    model.releaseReference()
 
                                     callback false
 
@@ -263,35 +263,51 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                             @[property] = null if @[property].id is data
 
-                    __removeListeners: () ->
+                    releaseReference: () ->
 
-                        console.dir @
+                        async.parallel [
 
-                        callback() for callback in @listenerCallbacks
+                            (rootCallback) =>
 
-                        for modelName, properties of defaultOptions.relatedModels
+                                async.each @listenerCallbacks
 
-                            if _.isArray properties
+                                , (listenerCallback, callback) ->
 
-                                async.each properties
-
-                                , (property, callback) =>
-
-                                    if @[property] and _.isArray @[property]
-
-                                        item.__removeListeners() for item in @[property] when item.isModel
-
-                                    else if @[property] and @[property].isModel
-
-                                        @[property].__removeListeners()
+                                    listenerCallback()
 
                                     callback null
 
                                 , (err) ->
 
-                            else if @[properties] and @[properties].isModel
+                                    rootCallback null
 
-                                @[properties].__removeListeners()
+                            , (rootCallback) =>
+
+                                for modelName, properties of defaultOptions.relatedModels
+
+                                    if _.isArray properties
+
+                                        async.each properties
+
+                                        , (property, callback) =>
+
+                                            if @[property] and _.isArray @[property]
+
+                                                item.releaseReference() for item in @[property] when item.isModel
+
+                                            else if @[property] and @[property].isModel
+
+                                                @[property].releaseReference()
+
+                                            callback null
+
+                                        , (err) ->
+
+                                    else if @[properties] and @[properties].isModel
+
+                                        @[properties].releaseReference()
+
+                        ]
 
             for key, value of options
 
