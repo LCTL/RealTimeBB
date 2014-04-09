@@ -87,6 +87,57 @@ module.exports =
 
             if error then res.json error else res.json user
 
+    update: (req, res) ->
+
+        userId = req.param 'id'
+
+        User.update id: userId, req.params.all()
+
+        , (err, user) ->
+
+            if err
+
+                res.json err 
+
+            else if user
+
+                UserService.publishUpdate user
+
+                user.setShowEmail true
+
+                res.json user
+
+    destroy: (req, res) ->
+
+        userId = req.param 'id'
+
+        UserService.findOneById(userId)
+
+        .then (user) ->
+
+            if user
+
+                user.destroy (err) ->
+
+                    if err
+
+                        res.json err 
+
+                    else 
+
+                        UserService.publishDestroy user
+
+                        res.json user
+
+                        for socketId, handshaken of req?.socket?.manager.handshaken
+
+                            if handshaken.session.user and handshaken.session.user?.id is user.id
+
+                                handshaken.session.user = null
+
+                                sails.config.session.store.set handshaken.sessionID, handshaken.session
+       
+
     register: (req, res) ->
 
         data = req.params.all()
