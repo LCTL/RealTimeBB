@@ -2,9 +2,9 @@ define [], () ->
 
     class UserService
 
-        @$inject: ['$log', '$rootScope', 'CommunicationService', 'promiseTask']
+        @$inject: ['$log', '$rootScope', 'CommunicationService', 'Utils']
 
-        constructor: (@$log, @$rootScope, @communicationService, @promiseTask) ->
+        constructor: (@$log, @$rootScope, @communicationService, @utils) ->
 
             @communicationService.listenEvent 'User'
 
@@ -44,9 +44,9 @@ define [], () ->
 
                 false 
 
-        register: (user) ->
+        register: (user, asyncCallback) ->
 
-            @promiseTask (deferred) =>
+            @utils.promiseTask asyncCallback, (deferred) =>
 
                 @communicationService.post('/user/register', user).then (data) =>
 
@@ -61,9 +61,9 @@ define [], () ->
 
                         deferred.reject data
 
-        login: (user) ->
+        login: (user, asyncCallback) ->
 
-            @promiseTask (deferred) =>
+            @utils.promiseTask asyncCallback, (deferred) =>
 
                 @communicationService.post('/user/login', user).then (user) =>
 
@@ -78,7 +78,7 @@ define [], () ->
 
         logout: () ->
 
-            @promiseTask (deferred) =>
+            @utils.promiseTask asyncCallback, (deferred) =>
 
                 @communicationService.get('/user/logout').then (result) =>
 

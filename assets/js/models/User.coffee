@@ -1,6 +1,6 @@
 define ['app', 'ResourceFactory'], (app) ->
 
-    app.register.factory 'User', ['CommunicationService', 'promiseTask', 'ResourceFactory', (communicationService, promiseTask, resourceFactory) ->
+    app.register.factory 'User', ['CommunicationService', 'Utils', 'ResourceFactory', (communicationService, utils, resourceFactory) ->
 
         communicationService.listenEvent 'User'
 
@@ -22,9 +22,9 @@ define ['app', 'ResourceFactory'], (app) ->
 
                     if @roles then $root.user.roles.indexOf(role) != -1 else false 
 
-                isDataAvailable: (data, action) ->
+                isDataAvailable: (data, action, asyncCallback) ->
 
-                    promiseTask (deferred) =>
+                    utils.promiseTask asyncCallback, (deferred) =>
 
                         communicationService.get("/user/#{action}/#{data}").then (response) =>
 

@@ -2,9 +2,9 @@ define [], () ->
 
     class CommunicationService
 
-        @$inject: ['$rootScope', '$log', 'socket.io', 'csrf', 'promiseTask']
+        @$inject: ['$rootScope', '$log', 'socket.io', 'csrf', 'Utils']
 
-        constructor: (@$rootScope, @$log, @io, @csrf, @promiseTask) ->
+        constructor: (@$rootScope, @$log, @io, @csrf, @utils) ->
 
             @connectSocket()
 
@@ -31,9 +31,9 @@ define [], () ->
 
                     @connected = false
 
-        action: (path, data, method, needCsrf) ->
+        action: (path, data, method, needCsrf, asyncCallback) ->
 
-            @promiseTask (deferred) =>
+            @utils.promiseTask asyncCallback, (deferred) =>
 
                 if typeof needCsrf == 'undefined' and method != 'get'
 

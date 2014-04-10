@@ -1,6 +1,6 @@
 define ['app', 'classes/Module'], (app, Module) ->
 
-    app.register.factory 'ResourceFactory', ['$rootScope', '$injector', 'CommunicationService', 'promiseTask', ($rootScope, $injector, communicationService, promiseTask) ->
+    app.register.factory 'ResourceFactory', ['$rootScope', '$injector', 'CommunicationService', 'Utils', ($rootScope, $injector, communicationService, utils) ->
 
         (modelName, basePath, options) ->
 
@@ -24,9 +24,9 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                     identity: modelName
 
-                    action: (additionalPath, params, method) ->
+                    action: (additionalPath, params, method, asyncCallback) ->
 
-                        promiseTask (deferred) ->
+                        utils.promiseTask asyncCallback, (deferred) ->
 
                             if additionalPath
 
@@ -50,9 +50,9 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                         new Resource data
 
-                    findAll: (skip, limit) ->
+                    findAll: (skip, limit, asyncCallback) ->
 
-                        promiseTask (deferred) ->
+                        utils.promiseTask asyncCallback, (deferred) ->
 
                             skip ?= 0
                             limit ?= 20
@@ -89,9 +89,9 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                         Resource.findAll(Resource.calculateSkipByPage(page), limit)
 
-                    findById: (id) ->
+                    findById: (id, asyncCallback) ->
 
-                        promiseTask (deferred) ->
+                        utils.promiseTask asyncCallback, (deferred) ->
 
                             Resource.action("/#{id}", null, 'get')
 

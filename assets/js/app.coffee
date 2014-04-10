@@ -1,4 +1,4 @@
-define ['angularAMD', 'classes/CommunicationService', 'classes/UserService', 'classes/RouteRestrictionServiceProvider'], (angularAMD, CommunicationService, UserService, RouteRestrictionServiceProvider) ->
+define ['angularAMD', 'classes/CommunicationService', 'classes/UserService', 'classes/RouteRestrictionServiceProvider', 'classes/Utils'], (angularAMD, CommunicationService, UserService, RouteRestrictionServiceProvider, Utils) ->
 
     app = angular.module 'webapp', ['ngRoute', 'route-segment', 'view-segment', 'ngAnimate', 'mgcrea.ngStrap', 'infinite-scroll', 'ngProgress', 'angularMoment']
 
@@ -6,6 +6,7 @@ define ['angularAMD', 'classes/CommunicationService', 'classes/UserService', 'cl
     app.value 'csrf', window.csrf
 
     app.provider 'RouteRestrictionService', RouteRestrictionServiceProvider
+    app.service 'Utils', Utils
     app.service 'CommunicationService', CommunicationService
     app.service 'UserService', UserService
 
@@ -73,18 +74,6 @@ define ['angularAMD', 'classes/CommunicationService', 'classes/UserService', 'cl
         routeRestrictionServiceProvider.restricts.push 
             segment: 'admin'
             roles: ['admin']
-
-    ]
-    
-    app.factory 'promiseTask', ['$q', ($q) ->
-
-        (task) ->
-
-            deferred = $q.defer()
-
-            task deferred
-
-            deferred.promise
 
     ]
 
