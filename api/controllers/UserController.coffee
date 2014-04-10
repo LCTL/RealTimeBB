@@ -116,6 +116,7 @@ module.exports =
 
                 user.setShowEmail true
                 res.json user
+                UserService.publishUpdate user, NotificationService.adminRoomName
 
                 user.setShowEmail false
                 UserService.publishUpdate user
