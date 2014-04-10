@@ -43,3 +43,21 @@ module.exports =
             objects = object.slice()
 
         objects
+
+    findSessionId: (req) ->
+
+        sessionId = null
+
+        if req.isSocket
+
+            handshake = req.socket.manager.handshaken[req.socket.id]
+
+            if handshake
+
+                sessionId = handshake.sessionID
+
+        else
+
+            sessionId = req.session.id
+
+        sessionId

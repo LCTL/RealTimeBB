@@ -37,6 +37,9 @@ module.exports =
             defaultsTo: ['user']
             required: true
 
+        sessionId:
+            type: 'string'
+
         toJSON: () ->
 
             obj = @toObject()
@@ -44,6 +47,7 @@ module.exports =
             obj.gravatar = toGravatarHash(obj.email)
 
             delete obj.password
+            delete obj.sessionId
 
             if not @_showEmail
 

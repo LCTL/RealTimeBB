@@ -127,20 +127,14 @@ module.exports =
 
                         UserService.publishDestroy user
 
-                        res.json user
+                        UserService.destroyUserSession user, (err) ->
 
-                        for socketId, handshaken of req?.socket?.manager.handshaken
-
-                            if handshaken.session.user and handshaken.session.user?.id is user.id
-
-                                handshaken.session.user = null
-
-                                sails.config.session.store.set handshaken.sessionID, handshaken.session
-       
+                            if err then res.json err else res.json user
 
     register: (req, res) ->
 
         data = req.params.all()
+        data.sessionId = Utils.findSessionId req
 
         createUser data, (error, user) ->
 
@@ -159,15 +153,36 @@ module.exports =
         password = req.param('password')
         hashedPassword = hashPassword(password)
 
-        User.findOne()
-        .where
+        User.findOne().where
+
             username: username
             password: hashedPassword
+
         .then (user) ->
+
             if user 
-                req.session.user = user
-            
-            res.json user
+
+                user.sessionId = Utils.findSessionId req
+
+                user.save (err) ->
+
+                    if err
+
+                        res.json 
+                            status: 500
+                            error: err
+
+                    else
+
+                        req.session.user = user
+
+                        res.json user
+
+            else
+
+                res.json
+                    status: 500
+                    message: "Incorrect username or password"
 
     logout: (req, res) ->
 
