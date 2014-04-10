@@ -25,6 +25,10 @@ class NotificationService
 
     joinSpecialRoom: (session, socket) ->
 
+        if session?.user?
+
+            socket.join session.user.id
+
         if session?.user?.roles and _.contains session.user.roles, 'admin'
 
             socket.join @adminRoomName

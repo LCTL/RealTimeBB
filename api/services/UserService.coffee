@@ -1,5 +1,6 @@
 BaseModelService = require './BaseModelService'
 Utils = require './Utils'
+NotificationService = require './NotificationService'
 
 class UserService extends BaseModelService
 
@@ -9,7 +10,7 @@ class UserService extends BaseModelService
 
     destroyUserSession: (user, asyncCallback) ->
 
-        Utils.promiseTask asyncCallback, (deferred) ->
+        Utils.promiseTask asyncCallback, (deferred) =>
 
             if not user.sessionId
 
@@ -17,7 +18,7 @@ class UserService extends BaseModelService
 
             sessionStore = sails.config.session.store
 
-            sessionStore.get user.sessionId, (err, session) ->
+            sessionStore.get user.sessionId, (err, session) =>
 
                 if err
 
@@ -31,7 +32,7 @@ class UserService extends BaseModelService
 
                     session.user = null
 
-                    sessionStore.set user.sessionId, session, (err) ->
+                    sessionStore.set user.sessionId, session, (err) =>
 
                         if err
 
@@ -39,6 +40,12 @@ class UserService extends BaseModelService
 
                         else
 
+                            @publishLogout user
+
                             deferred.resolve()
+
+    publishLogout: (user, roomName) ->
+
+        NotificationService.publish @modelClass, user, 'logout', user.id
 
 module.exports = new UserService()

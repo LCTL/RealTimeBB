@@ -184,25 +184,27 @@ module.exports =
 
             if user 
 
-                user.sessionId = Utils.findSessionId req
+                UserService.destroyUserSession user, (err) ->
 
-                user.save (err) ->
+                    user.sessionId = Utils.findSessionId req
 
-                    if err
+                    user.save (err) ->
 
-                        res.json 
-                            status: 500
-                            error: err
+                        if err
 
-                    else
+                            res.json 
+                                status: 500
+                                error: err
 
-                        req.session.user = user
+                        else
 
-                        if req.isSocket
+                            req.session.user = user
 
-                            NotificationService.joinSpecialRoom req.session, req.socket
+                            if req.isSocket
 
-                        res.json user
+                                NotificationService.joinSpecialRoom req.session, req.socket
+
+                            res.json user
 
             else
 

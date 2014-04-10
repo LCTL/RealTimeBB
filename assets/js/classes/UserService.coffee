@@ -6,6 +6,16 @@ define [], () ->
 
         constructor: (@$log, @$rootScope, @communicationService, @promiseTask) ->
 
+            @communicationService.listenEvent 'User'
+
+            @$rootScope.$on 'User', (event, message) =>
+
+                if message.action is 'logout'
+
+                    @$rootScope.user = null
+
+                    @$rootScope.$apply()
+
         isLoggedIn: () ->
 
             if @$rootScope.user then true else false
