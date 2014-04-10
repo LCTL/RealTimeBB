@@ -5,8 +5,10 @@ define ['app', 'Forum'], (app) ->
         $rootScope.pageTitle = "Admin Console"
         $scope.forums = []
 
+        allForumLoaded = false
         forumModal = null
         page = 1
+        limit = 100
         listenerCallbacks = []
 
         $scope.showForumModal = (forum, mode) ->
@@ -34,42 +36,45 @@ define ['app', 'Forum'], (app) ->
 
         $scope.nextPage = () ->
 
-            $scope.budy = true
+            if not $scope.busy and not allForumLoaded
 
-            Forum.findAllByPaginate(page).then (forums) ->
+                $scope.busy = true
 
-                if forums
+                Forum.findAllByPaginate(page, limit).then (forums) ->
 
-                    $scope.forums.push forum for forum in forums
+                    if forums
 
-                    page++
+                        $scope.forums.push forum for forum in forums
 
-                $scope.budy = false
+                        page++
+
+                    allForumLoaded = _.isEmpty forums or forums.length < limit
+
+                    $scope.busy = false
 
         $scope.create = (forum) ->
 
             forum.save()
+
             .then (forumData) ->
 
-                $scope.forums.push Forum.create forum
-
                 forumModal.hide() if forumModal
+
+            , (err) ->
+
+                alert err
 
         $scope.update = (forum) ->
 
             forum.update()
+
             .then (forumData) ->
 
-                async.each $scope.forums
+                forumModal.hide() if forumModal
 
-                , (forum, callback) ->
+            , (err) ->
 
-                    forum.copyDataToInstance forumData if forum.id == forumData.id
-                    callback(null)
-
-                , () ->
-
-                    forumModal.hide() if forumModal
+                alert err
 
         $scope.destroy = (forum) ->
 
@@ -77,24 +82,43 @@ define ['app', 'Forum'], (app) ->
 
             .then (forumData) ->
 
+                forumModal.hide() if forumModal
+
+            , (err) ->
+
+                alert err
+
+        listenerCallbacks.push $scope.$on 'Forum', (event, message) ->
+
+            if message.action is 'create'
+
+                async.some $scope.forums
+
+                , (forum, callback) ->
+
+                    if forum.id is message.data.id then callback true else callback false
+
+                , (result) ->
+
+                    if not result
+
+                        $scope.forums.push Forum.create message.data
+
+                        $scope.$digest()
+
+            else if message.action is 'destroy'
+
                 async.filter $scope.forums
 
                 , (forum, callback) ->
 
-                    if forum.id == forumData.id 
-
-                        forum.releaseReference()
-
-                        callback false 
-
-                    else 
-
-                        callback true
+                    if forum.id is message.data.id then callback false else callback true
 
                 , (results) ->
 
                     $scope.forums = results
-                    forumModal.hide() if forumModal
+
+                    $scope.$digest()
 
         listenerCallbacks.push $scope.$on '$destroy', () ->
 

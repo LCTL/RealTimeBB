@@ -39,8 +39,10 @@ module.exports =
     update: (req, res) ->
 
         forumId = req.param 'id'
+        data = req.params.all()
+        delete data.id
 
-        Forum.update id: forumId, req.params.all()
+        Forum.update id: forumId, data
 
         , (err, forum) ->
 
