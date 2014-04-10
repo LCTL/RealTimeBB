@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "description": "RealTimeBB is a real time bulletin board system build on the Nodejs.",
   "dependencies": {
-    "sails": "0.9.13",
+    "sails": "0.9.16",
     "sails-disk": "~0.9.0",
     "sails-mongo": "~0.9.7",
     "connect-redis": "1.5.0",
