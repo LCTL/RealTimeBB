@@ -101,8 +101,10 @@ module.exports =
     update: (req, res) ->
 
         userId = req.param 'id'
+        data = req.params.all()
+        delete data.id
 
-        User.update id: userId, req.params.all()
+        User.update id: userId, data
 
         , (err, users) ->
 
