@@ -298,7 +298,9 @@ define ['app', 'classes/Module'], (app, Module) ->
 
                                     callback null
 
-                                , (err) ->
+                                , (err) =>
+
+                                    @listenerCallbacks = []
 
                                     rootCallback null
 
