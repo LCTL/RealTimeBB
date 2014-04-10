@@ -53,6 +53,8 @@ module.exports =
 
                 delete obj.email
 
+            delete obj._showEmail
+
             return obj
 
         setShowEmail: (showEmail) ->

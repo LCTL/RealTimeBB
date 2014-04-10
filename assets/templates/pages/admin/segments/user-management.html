@@ -17,7 +17,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="user in users">
+            <tr ng-repeat="user in (users | orderBy:'createdAt') track by user.id">
                 <td>
                     <span ng-bind="$index + 1"> </span>
                 </td>

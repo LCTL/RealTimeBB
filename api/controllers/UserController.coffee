@@ -67,7 +67,7 @@ module.exports =
 
                 else 
 
-                    user.setShowEmail true
+                    users.setShowEmail true
 
                     deferred.resolve users
 
@@ -83,9 +83,20 @@ module.exports =
 
         data = req.params.all()
 
-        createUser data, (error, user) ->
+        createUser data, (err, user) ->
 
-            if error then res.json error else res.json user
+            if err 
+
+                res.json err 
+
+            else 
+
+                user.setShowEmail true
+                res.json user
+                UserService.publishCreate user, NotificationService.adminRoomName
+
+                user.setShowEmail false
+                UserService.publishCreate user
 
     update: (req, res) ->
 
@@ -93,19 +104,21 @@ module.exports =
 
         User.update id: userId, req.params.all()
 
-        , (err, user) ->
+        , (err, users) ->
 
             if err
 
                 res.json err 
 
-            else if user
+            else if users
 
-                UserService.publishUpdate user
+                user = _.first users
 
                 user.setShowEmail true
-
                 res.json user
+
+                user.setShowEmail false
+                UserService.publishUpdate user
 
     destroy: (req, res) ->
 
@@ -125,11 +138,17 @@ module.exports =
 
                     else 
 
-                        UserService.publishDestroy user
-
                         UserService.destroyUserSession user, (err) ->
 
+                            UserService.publishDestroy user
+
                             if err then res.json err else res.json user
+
+            else
+
+                res.json
+                    status: 500
+                    message: "User not found"
 
     register: (req, res) ->
 
@@ -146,6 +165,8 @@ module.exports =
 
                 req.session.user = user
                 res.json user
+
+                UserService.publishCreate user
 
     login: (req, res) ->
 
@@ -175,6 +196,10 @@ module.exports =
                     else
 
                         req.session.user = user
+
+                        if req.isSocket
+
+                            NotificationService.joinSpecialRoom req.session, req.socket
 
                         res.json user
 

@@ -6,15 +6,28 @@ class NotificationService
 
     constructor: () ->
 
-        @defaultRoomName = 'commons'
+        @defaultRoomName = 'public'
+        @adminRoomName = 'admin'
 
     onConnect: (session, socket) ->
 
         socket.join @defaultRoomName
 
+        @joinSpecialRoom session, socket
+
     onDisconnect: (session, socket) ->
 
         socket.leave @defaultRoomName
+
+        if session?.user?.roles and _.contains session.user.roles, 'admin'
+
+            socket.leave @adminRoomName
+
+    joinSpecialRoom: (session, socket) ->
+
+        if session?.user?.roles and _.contains session.user.roles, 'admin'
+
+            socket.join @adminRoomName
 
     publishCreate: (modelClass, model, roomName) ->
 

@@ -2,6 +2,8 @@ define ['app', 'ResourceFactory'], (app) ->
 
     app.register.factory 'User', ['CommunicationService', 'promiseTask', 'ResourceFactory', (communicationService, promiseTask, resourceFactory) ->
 
+        communicationService.listenEvent 'User'
+
         resourceFactory 'User', '/user',
 
             insertableAttributes: 

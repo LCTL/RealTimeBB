@@ -5,8 +5,10 @@ define ['app', 'User'], (app) ->
         $scope.users = []
         $scope.user = null
 
+        allUserLoaded = false
         userModal = null
         page = 1
+        limit = 100
         listenerCallbacks = []
 
         $scope.showUserModal = (user, mode) ->
@@ -40,70 +42,89 @@ define ['app', 'User'], (app) ->
 
         $scope.nextPage = () ->
 
-            $scope.busy = true
+            if not $scope.busy and not allUserLoaded
 
-            User.findAllByPaginate(page).then (users) ->
+                $scope.busy = true
 
-                if users
+                User.findAllByPaginate(page, limit).then (users) ->
 
-                    $scope.users.push user for user in users
+                    if users
 
-                    page++
+                        $scope.users.push user for user in users
 
-                $scope.busy = false
+                        page++
+
+                    allUserLoaded = _.isEmpty users or users.length < limit
+
+                    $scope.busy = false
 
         $scope.create = (user) ->
 
-            user.save().then (user) ->
-
-                $scope.users.push user
+            user.save().then (userData) ->
 
                 userModal.hide() if userModal
 
+            , (err) ->
+
+                alert err
+
         $scope.update = (user) ->
 
-            user.update().then (user) ->
+            user.update().then (userData) ->
 
-                async.each $scope.users
+                userModal.hide() if userModal
 
-                , (item, callback) ->
+            , (err) ->
 
-                    if item.id == user.id
-
-                        console.dir item
-
-                        user.copyDataToInstance item
-
-                    callback(null)
-
-                , () ->
-
-                    userModal.hide() if userModal
+                alert err
 
         $scope.delete = (user) ->
 
-            user.destroy().then (user) ->
+            user.destroy().then (userData) ->
 
-                async.filter $scope.users
+                userModal.hide() if userModal
 
-                , (item, callback) ->
+            , (err) ->
 
-                    if item.id is user.id
+                alert err
 
-                        user.releaseReference()
+        listenerCallbacks.push $scope.$on 'User', (event, message) ->
 
-                        callback false
+            if message.action is 'create' and message.data.email
 
-                    else
+                async.some $scope.users
+
+                , (user, callback) ->
+
+                    if user.id is message.data.id
 
                         callback true
 
+                    else 
+
+                        callback false
+
+                , (result) ->
+
+                    if not result
+
+                        $scope.users.push User.create message.data
+
+                        $scope.$digest()
+
+            else if message.action is 'destroy'
+
+                async.filter $scope.users
+
+                , (user, callback) ->
+
+                    if user.id is message.data.id then callback false else callback true
+
                 , (results) ->
 
-                     $scope.users = results
+                    $scope.users = results
 
-                     userModal.hide() if userModal
-
+                    $scope.$digest()
 
         listenerCallbacks.push $scope.$watch 'user.username', (newValue, oldValue) ->
 
