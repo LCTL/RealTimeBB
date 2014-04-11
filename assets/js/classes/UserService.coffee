@@ -76,7 +76,7 @@ define [], () ->
 
                         deferred.reject user
 
-        logout: () ->
+        logout: (asyncCallback) ->
 
             @utils.promiseTask asyncCallback, (deferred) =>
 
