@@ -7,6 +7,50 @@
  * Usage: res.notFound()
  */
 
+var async = require('async');
+var _ = require('underscore');
+_.str = require('underscore.string');
+var extensionsToIgnore = [
+  '.js',
+  '.css',
+  '.xml',
+  '.less',
+  '.png',
+  '.jpg',
+  '.jpeg',
+  '.gif',
+  '.pdf',
+  '.doc',
+  '.txt',
+  '.ico',
+  '.rss',
+  '.zip',
+  '.mp3',
+  '.rar',
+  '.exe',
+  '.wmv',
+  '.doc',
+  '.avi',
+  '.ppt',
+  '.mpg',
+  '.mpeg',
+  '.tif',
+  '.wav',
+  '.mov',
+  '.psd',
+  '.ai',
+  '.xls',
+  '.mp4',
+  '.m4a',
+  '.swf',
+  '.dat',
+  '.dmg',
+  '.iso',
+  '.flv',
+  '.m4v',
+  '.torrent'
+];
+
 module.exports[404] = function pageNotFound(req, res) {
 
   /*
@@ -36,8 +80,20 @@ module.exports[404] = function pageNotFound(req, res) {
     // If the view doesn't exist, or an error occured, send json
     if (!browserRequest && err) { return res.json(result, result.status); }
 
-    // Otherwise, serve the `views/main.*` page
-    res.render(viewFilePath);
+    async.some(extensionsToIgnore, function(extension, callback){
+
+      callback(_.str.endsWith(req.path, extension));
+
+    }, function (exist) {
+
+      if (exist){
+        res.send(statusCode);
+      } else {
+        // Otherwise, serve the `views/main.*` page
+        res.render(viewFilePath);
+      }
+    });
+    
   });
 
 };
