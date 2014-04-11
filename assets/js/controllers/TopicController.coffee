@@ -1,6 +1,6 @@
 define ['app', 'Markdown', 'Topic', 'Post'], (app) ->
 
-    app.register.controller 'TopicController', ['$rootScope', '$scope', '$routeParams', 'Topic', 'Post', ($rootScope, $scope, $routeParams, Topic, Post) ->
+    app.register.controller 'TopicController', ['$rootScope', '$scope', '$routeParams', 'UserService', 'Topic', 'Post', ($rootScope, $scope, $routeParams, userService, Topic, Post) ->
 
         $rootScope.pageTitle = "Admin Console"
 
@@ -21,6 +21,10 @@ define ['app', 'Markdown', 'Topic', 'Post'], (app) ->
             post.save().then (post) ->
 
                 $scope.replyPost.content = ''
+
+        $scope.isLoggedIn = () ->
+
+            userService.isLoggedIn()
 
         $scope.$on '$destroy', () ->
 
