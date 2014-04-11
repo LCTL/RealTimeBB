@@ -1,14 +1,18 @@
 define ['app', 'UserService', 'User'], (app) ->
 
-    app.register.controller 'RegisterController', ['$rootScope', '$scope', '$location', 'UserService', 'User', ($rootScope, $scope, $location, userService, User) ->
+    app.register.controller 'RegisterController', ['$rootScope', '$scope', '$location', '$translate', 'UserService', 'User', ($rootScope, $scope, $location, $translate, userService, User) ->
 
         checkingUsername = false
         checkUserDataAvailableLocking = false
-
-        $rootScope.pageTitle = 'Register'
         $scope.user = User.create()
 
         listenerCallbacks = []
+
+        $translate('REGISTER.TITLE').then (title) ->
+
+            $translate('COMMONS.INNER_PAGE_TITLE', title: title).then (pageTitle) ->
+
+                $rootScope.pageTitle = pageTitle
 
         listenerCallbacks.push $scope.$watch 'user.username', (newValue, oldValue) ->
             

@@ -1,8 +1,10 @@
 define ['app', 'Forum'], (app) ->
 
-    app.register.controller 'MainController', ['$rootScope', '$scope', 'Forum', ($rootScope, $scope, Forum) ->
+    app.register.controller 'MainController', ['$rootScope', '$scope', '$translate', 'Forum', ($rootScope, $scope, $translate, Forum) ->
 
-        $rootScope.pageTitle = "RealTimeBB"
+        $translate('COMMONS.PAGE_TITLE').then (pageTitle) ->
+
+            $rootScope.pageTitle = pageTitle
 
         $scope.forums = []
         $scope.busy = false

@@ -1,59 +1,59 @@
 <div class="container-fluid">
     <div class="page-header">
-        <h1>Registration Form</h1>
+        <h1 translate="REGISTER.TITLE"></h1>
     </div>
     <div class="row">
         <div class="col-lg-offset-3 col-lg-6">
             <form name="form" role="form" novalidate>
                 <div class="form-group" ng-class="{'has-error': (form.email.$dirty &amp;&amp; form.email.$invalid) || !user.emailAvailable}">
-                    <label for="email">Email</label>
+                    <label for="email" translate="FIELD.EMAIL"></label>
                     <div class="input-group">
-                        <input type="text" ng-model="user.email" name="email" class="form-control" placeholder="Email" maxlength="200" ng-minlength="5" ng-pattern="/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/" required />
+                        <input type="text" ng-model="user.email" name="email" class="form-control" placeholder="{{'FIELD.EMAIL' | translate}}" maxlength="200" ng-minlength="5" ng-pattern="/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/" required />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-ok text-success" ng-show="user.emailAvailable"></span>
                             <span class="glyphicon glyphicon-remove text-danger" ng-show="!user.emailAvailable"></span>
                         </span>
                     </div>
                     <div ng-show="form.email.$dirty">
-                        <p ng-show="form.email.$error.required" class="text-danger">Cannot be null or empty</p>
-                        <p ng-show="form.email.$error.minlength" class="text-danger">Minimum 5 character</p>
-                        <p ng-show="form.email.$error.pattern" class="text-danger">Invalid email address</p>
-                        <p ng-show="!user.emailAvailable" class="text-danger">Email address not available</p>
+                        <p ng-show="form.email.$error.required" class="text-danger" translate="VALIDATION.REQUIRED"></p>
+                        <p ng-show="form.email.$error.minlength" class="text-danger" translate="VALIDATION.MIN_LENGTH", translate="{min: 5}"></p>
+                        <p ng-show="form.email.$error.pattern" class="text-danger" translate="VALIDATION.EMAIL"></p>
+                        <p ng-show="!user.emailAvailable" class="text-danger" translate="VALIDATION.EMAIL_NOT_AVAILABLE"></p>
                     </div>
                 </div>
                 <div class="form-group" ng-class="{'has-error': (form.username.$dirty &amp;&amp; form.username.$invalid) || !user.usernameAvailable}">
-                    <label for="username">Username</label>
+                    <label for="username" translate="FIELD.USERNAME"></label>
                     <div class="input-group">
-                        <input type="text" class="form-control" name="username" placeholder="Username" ng-model="user.username" maxlength="50" ng-minlength="5" ng-pattern="/^[A-Za-z0-9_]+$/" required />
+                        <input type="text" class="form-control" name="username" placeholder="{{'FIELD.USERNAME' | translate}}" ng-model="user.username" maxlength="50" ng-minlength="5" ng-pattern="/^[A-Za-z0-9_]+$/" required />
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-ok text-success" ng-show="user.usernameAvailable"></span>
                             <span class="glyphicon glyphicon-remove text-danger" ng-show="!user.usernameAvailable"></span>
                         </span>
                     </div>
                     <div ng-show="form.username.$dirty">
-                        <p ng-show="form.username.$error.required" class="text-danger">Cannot be null or empty</p>
-                        <p ng-show="form.username.$error.minlength" class="text-danger">Minimum 5 character</p>
-                        <p ng-show="form.username.$error.pattern" class="text-danger">Only accept A-Z a-z 0-9 and _ character</p>
-                        <p ng-show="!user.usernameAvailable" class="text-danger">Username not available</p>
+                        <p ng-show="form.username.$error.required" class="text-danger" translate="VALIDATION.REQUIRED"></p>
+                        <p ng-show="form.username.$error.minlength" class="text-danger" translate="VALIDATION.MIN_LENGTH", translate="{min: 5}"></p>
+                        <p ng-show="form.username.$error.pattern" class="text-danger" translate="VALIDATION.PATTERN" translate="{pattern: 'A-Za-z0-9_'}"></p>
+                        <p ng-show="!user.usernameAvailable" class="text-danger" translate="VALIDATION.USERNAME_NOT_AVAILABLE"></p>
                     </div>
                 </div>
                 <div class="form-group" ng-class="{'has-error': form.password.$dirty &amp;&amp; form.password.$invalid}">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" name="password" placeholder="Password" ng-model="user.password" maxlength="50" ng-minlength="6" required />
+                    <label for="password" translate="FIELD.PASSWORD"></label>
+                    <input type="password" class="form-control" name="password" placeholder="{{'FIELD.PASSWORD' | translate}}" ng-model="user.password" maxlength="50" ng-minlength="6" required />
                     <div ng-show="form.password.$dirty">
-                        <p ng-show="form.password.$error.required" class="text-danger">Cannot be null or empty</p>
-                        <p ng-show="form.password.$error.minlength" class="text-danger">Minimum 6 character</p>
+                        <p ng-show="form.password.$error.required" class="text-danger" translate="VALIDATION.REQUIRED"></p>
+                        <p ng-show="form.password.$error.minlength" class="text-danger" translate="VALIDATION.MIN_LENGTH", translate="{min: 6}"></p>
                     </div>
                 </div>
                 <div class="form-group" ng-class="{'has-error': form.passwordConfirmation.$dirty &amp;&amp; form.passwordConfirmation.$invalid}">
-                    <label for="password">Password Confirmation</label>
-                    <input type="password" class="form-control" name="passwordConfirmation" placeholder="Password Confirmation" ng-model="user.passwordConfirmation" maxlength="50" required />
+                    <label for="password" translate="FIELD.PASSWORD_CONFIRMATION"></label>
+                    <input type="password" class="form-control" name="passwordConfirmation" placeholder="{{'FIELD.PASSWORD_CONFIRMATION' | translate}}" ng-model="user.passwordConfirmation" maxlength="50" required />
                     <div ng-show="form.passwordConfirmation.$dirty">
-                        <p ng-show="form.passwordConfirmation.$error.required" class="text-danger">Cannot be null or empty</p>
-                        <p ng-show="!passwordMatch" class="text-danger">Password not match</p>
+                        <p ng-show="form.passwordConfirmation.$error.required" class="text-danger" translate="VALIDATION.REQUIRED"></p>
+                        <p ng-show="!passwordMatch" class="text-danger" translate="VALIDATION.PASSWORD_NOT_MATCH"></p>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-default" ng-click="register(user)" ng-disabled="form.$invalid || !passwordMatch || !user.emailAvailable || !user.usernameAvailable">Register</button>
+                <button type="submit" class="btn btn-default" ng-click="register(user)" ng-disabled="form.$invalid || !passwordMatch || !user.emailAvailable || !user.usernameAvailable" translate="BUTTON.REGISTER"></button>
             </form>
         </div>
     </div>

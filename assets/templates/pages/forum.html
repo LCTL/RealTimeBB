@@ -15,7 +15,7 @@
     </section>
     <section class="row">
         <div class="col-lg-12">
-            <button class="btn btn-primary" ng-click="showNewTopicModal()">New Topic</button>
+            <button class="btn btn-primary" ng-click="showNewTopicModal()" translate="FORUM.NEW_TOPIC"></button>
         </div>
     </section>
     <section class="row">
@@ -37,7 +37,7 @@
                             <hr />
                             <p>
                                 <small class="text-muted">
-                                    <span>Posted by </span>
+                                    <span translate="COMMONS.POSTED_BY"></span>
                                     <span ng-bind="topic.user.username"></span>
                                     <i class="glyphicon glyphicon-time"></i> 
                                     <span am-time-ago="topic.createdAt"></span>
@@ -46,7 +46,7 @@
                                 <span class="text-muted" ng-show="topic.lastPost"> | </span>
 
                                 <small class="text-muted" ng-show="topic.lastPost">
-                                    <span>Last replied by </span>
+                                    <span translate="COMMONS.LAST_REPLIED_BY"></span>
                                     <span ng-bind="topic.lastPost.user.username"></span>
                                     <i class="glyphicon glyphicon-time"></i> 
                                     <span am-time-ago="topic.lastPost.createdAt"></span>

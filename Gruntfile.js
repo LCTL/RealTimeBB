@@ -81,6 +81,10 @@ module.exports = function (grunt) {
     jsVendorBaseAssetsPath + 'ng-infinite-scroll.js',
     jsVendorBaseAssetsPath + 'ngprogress.js',
     jsVendorBaseAssetsPath + 'angular-moment.js',
+    jsVendorBaseAssetsPath + 'angular-translate.js',
+    jsVendorBaseAssetsPath + 'angular-translate-loader-static-files.js',
+    jsVendorBaseAssetsPath + 'messageformat.js',
+    jsVendorBaseAssetsPath + 'angular-translate-interpolation-messageformat.js',
 
     // Bring in the socket.io client
     jsVendorBaseAssetsPath + 'socket.io.js',
@@ -344,6 +348,26 @@ module.exports = function (grunt) {
           expand: true,
           cwd: bowerBasePath + 'angular-moment',
           src: ['angular-moment.js'],
+          dest: jsVendorBaseAssetsPath
+        }, { //bower angular-translate
+          expand: true,
+          cwd: bowerBasePath + 'angular-translate',
+          src: ['angular-translate.js'],
+          dest: jsVendorBaseAssetsPath
+        }, { //bower angular-translate
+          expand: true,
+          cwd: bowerBasePath + 'angular-translate-loader-static-files',
+          src: ['angular-translate-loader-static-files.js'],
+          dest: jsVendorBaseAssetsPath
+        }, { //bower angular-translate
+          expand: true,
+          cwd: bowerBasePath + 'angular-translate-interpolation-messageformat',
+          src: ['angular-translate-interpolation-messageformat.js'],
+          dest: jsVendorBaseAssetsPath
+        }, { //bower angular-translate
+          expand: true,
+          cwd: bowerBasePath + 'messageformat',
+          src: ['messageformat.js'],
           dest: jsVendorBaseAssetsPath
         }]
       },

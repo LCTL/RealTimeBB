@@ -2,20 +2,20 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="top-navbar">
-                <span class="sr-only">Toggle navigation</span>
+                <span class="sr-only" translate="NAVBAR.TOGGLE_NAVIGATION"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">RealTimeBB</a>
+            <a class="navbar-brand" href="/" translate="COMMONS.SITE_NAME"></a>
         </div>
         <div class="collapse navbar-collapse" id="top-navbar">
             <ul class="nav navbar-nav navbar-right">
                 <li data-match-route="/register" ng-hide="$root.user">
-                    <a href="/register">Register</a>
+                    <a href="/register" translate="NAVBAR.REGISTER"></a>
                 </li>
                 <li data-match-route="/login" ng-hide="$root.user">
-                    <a href="/login">Login</a>
+                    <a href="/login" translate="NAVBAR.LOGIN"></a>
                 </li>
                 <li class="dropdown" ng-show="$root.user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -23,13 +23,13 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#">Profile</a>
+                            <a href="#" translate="NAVBAR.PROFILE"></a>
                         </li>
                         <li ng-show="$root.user.roles.indexOf('admin') != -1">
-                            <a href="/admin">Admin Console</a>
+                            <a href="/admin" translate="NAVBAR.ADMIN_CONSOLE"></a>
                         </li>
                         <li>
-                            <a href="#" ng-click="$root.logout()">Logout</a>
+                            <a href="#" ng-click="$root.logout()" translate="NAVBAR.LOGOUT"></a>
                         </li>
                     </ul>
                 </li>

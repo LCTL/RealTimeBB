@@ -1,8 +1,12 @@
 define ['app', 'UserService'], (app) ->
 
-    app.register.controller 'LoginController', ['$rootScope', '$scope', '$location', '$alert', '$log', 'UserService', ($rootScope, $scope, $location, $alert, $log, userService) ->
+    app.register.controller 'LoginController', ['$rootScope', '$scope', '$location', '$alert', '$log', '$translate', 'UserService', ($rootScope, $scope, $location, $alert, $log, $translate, userService) ->
 
-        $rootScope.pageTitle = 'Login'
+        $translate('LOGIN.TITLE').then (title) ->
+
+            $translate('COMMONS.INNER_PAGE_TITLE', title: title).then (pageTitle) ->
+
+                $rootScope.pageTitle = pageTitle
 
         $scope.user = 
             username: ''

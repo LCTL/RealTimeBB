@@ -1,0 +1,110 @@
+{
+    "COMMONS": {
+        "SITE_NAME": "RealTimeBB",
+        "PAGE_TITLE": "RealTimeBB",
+        "INNER_PAGE_TITLE": "{title} | RealTimeBB",
+        "POSTED_BY": "Posted by",
+        "LAST_REPLIED_BY": "Last replied by"
+    },
+
+    "VALIDATION": {
+        "REQUIRED": "Cannot be null or empty",
+        "MIN_LENGTH": "Minimum {min} character",
+        "MAX_LENGTH": "Cannot over {max} character",
+        "PATTERN": "Invalid pattern. Only accept {pattern}",
+        "EMAIL": "Invalid email address",
+        "EMAIL_NOT_AVAILABLE": "Email address not available",
+        "USERNAME_NOT_AVAILABLE": "Username not available",
+        "PASSWORD_NOT_MATCH": "Password not match"
+    },
+
+    "BUTTON":{
+        "REPLY": "Reply",
+        "LOGIN": "Login",
+        "REGISTER": "Register",
+        "CLOSE": "Close",
+        "CREATE": "Create",
+        "UPDATE": "Update",
+        "DELETE": "Delete"
+    },
+
+    "FIELD":{
+        "USERNAME": "Username",
+        "PASSWORD": "Password",
+        "EMAIL": "Email",
+        "PASSWORD_CONFIRMATION": "Password Confirmation",
+        "NAME": "Name",
+        "DESC": "Description",
+        "TITLE": "Title",
+        "CONTENT": "Content",
+        "CREATED_AT": "Create Data",
+        "UPDATED_AT": "Update Date"
+    },
+
+    "MODAL": {
+        "NEW_TOPIC": {
+            "TITLE": "New Topic"
+        }
+    },
+
+    "ALERT": {
+        "LOGIN": {
+            "TITLE": "Require Logged In User!",
+            "CONTENT_1": "Please click",
+            "CONTENT_2": "here",
+            "CONTENT_3": "to Login."
+        }
+    },
+
+    "NAVBAR": {
+        "TOGGLE_NAVIGATION": "Toggle navigation",
+        "REGISTER": "Register",
+        "LOGIN": "Login",
+        "ADMIN_CONSOLE": "Admin Console",
+        "PROFILE": "Profile",
+        "LOGOUT": "Logout"
+    },
+
+    "FOOTER": {
+        "POWERED_BY": "Powered by"
+    },
+
+    "ADMIN": {
+        "TITLE": "Admin Console",
+
+        "FORUM": {
+            "MENU_TITLE": "Forum",
+            "TITLE": "Forum Management",
+            "MODAL": {
+                "TITLE": "Forum"
+            }
+        },
+
+        "USER": {
+            "MENU_TITLE": "User",
+            "TITLE": "User Management",
+            "MODAL": {
+                "TITLE": "User"
+            }
+        }
+    },
+
+    "FORUM": {
+        "NEW_TOPIC": "New Topic"
+    },
+
+    "TOPIC": {
+        "EDITOR": "Editor",
+        "PREVIEW": "Preview"
+    },
+
+    "LOGIN": {
+        "TITLE": "Login Form",
+        "INCORRECT_UN_PW": "Incorrect username or password"
+    },
+
+    "REGISTER": {
+        "TITLE": "Registration Form"
+    }
+
+}

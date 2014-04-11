@@ -34,7 +34,7 @@
                             <hr />
                             <p>
                                 <small class="text-muted">
-                                    <span>Posted by </span>
+                                    <span translate="COMMONS.POSTED_BY"></span>
                                     <span ng-bind="topic.user.username"></span>
                                     <i class="glyphicon glyphicon-time"></i> 
                                     <span am-time-ago="topic.createdAt"></span>
@@ -53,7 +53,7 @@
                             <hr />
                             <p>
                                 <small class="text-muted">
-                                    <span>Posted by </span>
+                                    <span translate="COMMONS.POSTED_BY"></span>
                                     <span ng-bind="post.user.username"></span>
                                     <i class="glyphicon glyphicon-time"></i> 
                                     <span am-time-ago="post.createdAt"></span>
@@ -69,10 +69,10 @@
         <div class="col-lg-12 col-md-12">
             <ul class="nav nav-tabs">
                 <li class="active">
-                    <a href="#editor" data-toggle="tab">Editor</a>
+                    <a href="#editor" data-toggle="tab" translate="TOPIC.EDITOR"></a>
                 </li>
                 <li class="hidden-md hidden-lg">
-                    <a href="#preview" data-toggle="tab">Preview</a>
+                    <a href="#preview" data-toggle="tab" translate="TOPIC.PREVIEW"></a>
                 </li>
             </ul>
 
@@ -84,11 +84,11 @@
                                 <div class="form-group" ng-class="{'has-error': form.content.$dirty &amp;&amp; form.content.$invalid}">
                                     <textarea name="content" class="editor" ng-model="replyPost.content" placeholder="Markdown Content" ng-maxlength="5000" required> </textarea>
                                     <div ng-show="form.content.$dirty">
-                                        <p ng-show="form.content.$error.maxlength" class="text-danger">Over 5000 character</p>
+                                        <p ng-show="form.content.$error.maxlength" class="text-danger" translate="VALIDATION.MAX_LENGTH" translate-values="{max: 5000}"></p>
                                     </div>
                                 </div>
                                 <section>
-                                    <button class="btn btn-primary pull-right" ng-click="reply(replyPost)" ng-disabled="form.$invalid">Reply</button>
+                                    <button class="btn btn-primary pull-right" ng-click="reply(replyPost)" ng-disabled="form.$invalid" translate="BUTTON.REPLY"></button>
                                 </section>
                             </form>
                         </div>

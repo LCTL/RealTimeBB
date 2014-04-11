@@ -3,28 +3,28 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="$hide()">&times;</button>
-                <h4 class="modal-title">Forum</h4>
+                <h4 class="modal-title" translate="ADMIN.FORUM.MODAL.TITLE"></h4>
             </div>
             <div class="modal-body">
                 <form name="form" role="form" novalidate>
                     <div class="form-group" ng-class="{'has-error': form.name.$dirty &amp;&amp; form.name.$invalid}">
-                        <label for="email">Forum Name</label>
-                         <input type="text" ng-model="forum.name" name="name" class="form-control" placeholder="Forum Name" maxlength="50" required />
+                        <label for="email" translate="FIELD.NAME"></label>
+                         <input type="text" ng-model="forum.name" name="name" class="form-control" placeholder="{{'FIELD.NAME' | translate}}" maxlength="50" required />
                         <div ng-show="form.name.$dirty">
-                            <p ng-show="form.name.$error.required" class="text-danger">Cannot be null or empty</p>
+                            <p ng-show="form.name.$error.required" class="text-danger" translate="VALIDATION_REQUIRED"></p>
                         </div>
                     </div>
                     <div class="form-group" ng-class="{'has-error': form.desc.$dirty &amp;&amp; form.desc.$invalid}">
-                        <label for="email">Forum Description</label>
-                         <input type="text" ng-model="forum.desc" name="desc" class="form-control" placeholder="Forum Description" maxlength="500" />
+                        <label for="email" translate="FIELD.DESC"></label>
+                         <input type="text" ng-model="forum.desc" name="desc" class="form-control" placeholder="{{'FIELD.DESC' | translate}}" maxlength="500" />
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$hide()">Close</button>
-                <button type="button" class="btn btn-primary" ng-show="mode == 'create'" ng-click="create(forum)">Create</button>
-                <button type="button" class="btn btn-primary" ng-show="mode == 'edit'" ng-click="update(forum)">Save changes</button>
-                <button type="button" class="btn btn-danger" ng-show="mode == 'delete'" ng-click="destroy(forum)">Delete</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$hide()" translate="BUTTON.CLOSE"></button>
+                <button type="button" class="btn btn-primary" ng-show="mode == 'create'" ng-click="create(forum)" translate="BUTTON.CREATE"></button>
+                <button type="button" class="btn btn-primary" ng-show="mode == 'edit'" ng-click="update(forum)" translate="BUTTON.UPDATE"></button>
+                <button type="button" class="btn btn-danger" ng-show="mode == 'delete'" ng-click="destroy(forum)" translate="BUTTON.DELETE"></button>
             </div>
         </div>
     </div>

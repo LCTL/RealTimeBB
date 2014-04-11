@@ -1,6 +1,6 @@
 define ['angularAMD', 'classes/CommunicationService', 'classes/UserService', 'classes/RouteRestrictionServiceProvider', 'classes/Utils'], (angularAMD, CommunicationService, UserService, RouteRestrictionServiceProvider, Utils) ->
 
-    app = angular.module 'webapp', ['ngRoute', 'route-segment', 'view-segment', 'ngAnimate', 'mgcrea.ngStrap', 'infinite-scroll', 'ngProgress', 'angularMoment']
+    app = angular.module 'webapp', ['ngRoute', 'route-segment', 'view-segment', 'ngAnimate', 'mgcrea.ngStrap', 'infinite-scroll', 'ngProgress', 'angularMoment', 'pascalprecht.translate']
 
     app.value 'socket.io', window.io
     app.value 'csrf', window.csrf
@@ -10,7 +10,7 @@ define ['angularAMD', 'classes/CommunicationService', 'classes/UserService', 'cl
     app.service 'CommunicationService', CommunicationService
     app.service 'UserService', UserService
 
-    app.config ['$routeProvider',  '$routeSegmentProvider', '$locationProvider', '$injector', 'RouteRestrictionServiceProvider', ($routeProvider, $routeSegmentProvider, $locationProvider, $injector, routeRestrictionServiceProvider) ->
+    app.config ['$routeProvider',  '$routeSegmentProvider', '$locationProvider', '$translateProvider', 'RouteRestrictionServiceProvider', ($routeProvider, $routeSegmentProvider, $locationProvider, $translateProvider, routeRestrictionServiceProvider) ->
 
         $locationProvider.html5Mode(true).hashPrefix('!')
 
@@ -74,6 +74,16 @@ define ['angularAMD', 'classes/CommunicationService', 'classes/UserService', 'cl
         routeRestrictionServiceProvider.restricts.push 
             segment: 'admin'
             roles: ['admin']
+
+
+        $translateProvider.useStaticFilesLoader
+            prefix: window.assets.js.concat 'languages/'
+            suffix: '.json'
+
+        $translateProvider.useMessageFormatInterpolation()
+        $translateProvider.preferredLanguage 'en'
+        $translateProvider.fallbackLanguage 'en'
+        $translateProvider.useSanitizeValueStrategy 'escaped'
 
     ]
 

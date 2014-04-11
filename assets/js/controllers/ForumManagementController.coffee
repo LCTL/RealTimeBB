@@ -2,7 +2,6 @@ define ['app', 'Forum'], (app) ->
 
     app.register.controller 'ForumManagementController', ['$rootScope', '$scope', '$modal', 'Forum', ($rootScope, $scope, $modal, Forum) ->
 
-        $rootScope.pageTitle = "Admin Console"
         $scope.forums = []
 
         allForumLoaded = false

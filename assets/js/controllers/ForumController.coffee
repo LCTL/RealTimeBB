@@ -2,10 +2,8 @@ define ['app', 'Forum', 'Topic'], (app) ->
 
     app.register.controller 'ForumController', [
             '$rootScope', '$scope', '$routeParams', '$location', '$modal', '$alert', 
-            '$sce', '$timeout', 'UserService', 'Forum', 'Topic', 
-            ($rootScope, $scope, $routeParams, $location, $modal, $alert, $sce, $timeout, userService, Forum, Topic) ->
-
-                $rootScope.pageTitle = "Admin Console"
+            '$sce', '$timeout', '$translate', 'UserService', 'Forum', 'Topic', 
+            ($rootScope, $scope, $routeParams, $location, $modal, $alert, $sce, $timeout, $translate, userService, Forum, Topic) ->
 
                 $scope.forum = null
 
@@ -13,6 +11,10 @@ define ['app', 'Forum', 'Topic'], (app) ->
                 loginAlert = null
 
                 Forum.findById($routeParams.id).then (forum) ->
+
+                    $translate('COMMONS.INNER_PAGE_TITLE', title: forum.name).then (pageTitle) ->
+
+                        $rootScope.pageTitle = pageTitle
 
                     $scope.forum = forum
 
